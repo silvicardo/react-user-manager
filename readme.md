@@ -1,74 +1,70 @@
-# React assessment
+# Getting Started with Create React App
 
-## Goals of the assessment
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Evaluate the implementation of concepts related to component-based architectures, testing, and frontend related knowledge in general.
+## Available Scripts
 
-## Requirements
+In the project directory, you can run:
 
-![schema](schema.jpg)
+### `npm start`
 
-Build a React application that allows creating users with name and friends (friends are also users) with the following:
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-- A page that lists all users and links to a user detail page and to a "create user" page (1 in the schema)
-- A page to create a new user (2 in the schema)
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-  - in this page, a user must insert a name
-  - a friend can optionally be selected by users already existing
-  - if "new friend" is clicked a new "create user" page is stacked on top of the current one while showing a slice of the previous
-    NB: this can we done infinitely - when two or more creation are stacked clicking on a lower item in the stack asks the user to save or abort the current user creation
+### `npm test`
 
-- A page that allows edit of a user (3 in the schema)
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-## constrains
+### `npm run build`
 
-- a user creation or user update can randomly fail.
-- if creation fails, try again without the user knowing
-- if creation fails two times in a row inform the user that something went wrong and show a button that allows for a retry
-- cannot have two or more users with the same name
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-## Bonus point (optional)
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-consider these ONLY after the logic is already working
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-- Use TypeScript
-- Style the UI to be pleasant according to your taste
-- Use a css-in-js solution to do the styling such as [emotion](https://emotion.sh/)
+### `npm run eject`
 
-## Faq
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-Q: Should I create a server for the API?  
-A: No, an in-memory implementation is enough
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Q: Is the visual styling relevant for this test  
-A: No
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-Q: Should it work on mobile?  
-A: This is unimportant
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-Q: Can I use an existing component library? (material-ui, reactstrap etc)  
-A: No, it creates too much unnecessary clutter, defeating the purpose of this test.
+## Learn More
 
-Q: Can I use library XXX or framework YYY ?  
-A: Use anything you think is most appropriate for the usecase
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-Q: What should I test and how should I test it?  
-A: This decision is open to the developer.
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-## Why this test
+### Code Splitting
 
-The application is small but with some challenging details that allow a candidate to choose how to solve them.
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### What is being tested
+### Analyzing the Bundle Size
 
-- software design given constrains
-- component compositions and reuse
-- usage of patterns and best practices
-- knowledge of tooling around the Frontend ecosystem
-- attention to details in specification documents
-- making tech choices autonomously
-- software testing, what is tested and how
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-## Time requirements
+### Making a Progressive Web App
 
-This assessment is meant to test how a candidate works in a work-like day-to-day situation, a tight deadline (days) is highly discouraged.
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

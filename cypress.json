@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://localhost:3000",
+  "experimentalComponentTesting": true,
+  "componentFolder": "cypress/component",
+  "ignoreTestFiles": "**/examples/*.spec.js",
+  "env" : {
+    "coverage": false
+  }
+}
