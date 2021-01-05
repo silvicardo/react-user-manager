@@ -9,6 +9,7 @@ export default {
 const Template = (args) => <App {...args} />;
 
 export const ExampleStory = Template.bind({});
+
 ExampleStory.args = {
 
 };
