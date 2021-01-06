@@ -2,6 +2,7 @@ const lang = {
     users : {
         new: 'new user',
         list: 'users',
+        emptyList: 'no users found',
         name: 'name',
         friends: 'friends',
         actions : {
@@ -12,7 +13,6 @@ const lang = {
         },
         errors : {
             list: {
-                empty: 'no users found',
                 apiOrNetworkFailure: 'could not load users, refresh to retry',
             },
             createEdit: {
