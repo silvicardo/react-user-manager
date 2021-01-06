@@ -96,7 +96,7 @@ describe('USER SHOW EDIT PAGE', function(){
 
             cy.visit( `user/${userId}`);
 
-            cy.findByText(fakeUser.name).should('exist').and('be.visible');
+            cy.findByText(lang.users.noFriends).should('exist').and('be.visible');
 
         })
 
