@@ -5,6 +5,7 @@ const lang = {
         emptyList: 'no users found',
         name: 'name',
         friends: 'friends',
+        noFriends: 'this user still has no friends',
         actions : {
             remove: 'remove',
             add : 'new',
