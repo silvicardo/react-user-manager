@@ -49,18 +49,17 @@ describe('USERS LIST PAGE',function(){
                 body: []
             }).as('emptyUsers');
 
-            //TODO:: create copy in branch lang-text
-            cy.findByText('no users found').should('exist').and('be.visible');
+            cy.findByText(lang.users.emptyList).should('exist').and('be.visible');
 
         })
 
         it('handles user api failure gracefully', function(){
+
             cy.intercept('GET', 'users', {
                 statusCode: 500,
             }).as('failedUsers');
 
-            //TODO:: create copy in branch lang-text
-            cy.findByText('could not load users, refresh to retry').should('exist').and('be.visible');
+            cy.findByText(lang.users.errors.list.apiOrNetworkFailure).should('exist').and('be.visible');
 
         })
 
@@ -77,6 +76,7 @@ describe('USERS LIST PAGE',function(){
         })
 
         it('reaches a certain user show/edit page on list link click', function(){
+
             const fakeUsersList = new Array(1).map((_, idx) => ({id: idx + 1,  name: faker.fake("{{name.lastName}}} {{name.firstName}}") }));
 
             cy.intercept('GET', 'users', {
