@@ -29,9 +29,12 @@ describe('USERS LIST PAGE',function(){
 
         it('shows a non empty list of users', function(){
 
-            const fakeUsersList = new Array(10).map((_, idx) => ({id: idx,  name: faker.fake("{{name.lastName}}} {{name.firstName}}") }));
+            const fakeUsersList = new Array(10).map((_, idx) => ({id: idx + 1,  name: faker.fake("{{name.lastName}}} {{name.firstName}}") }));
 
-            cy.intercept('**/users', fakeUsersList).as('allUse');
+            cy.intercept('GET', 'users', {
+                statusCode: 200,
+                body: fakeUsersList
+            }).as('allUsers');
 
             fakeUsersList.forEach(user => {
                 cy.findByText(user.name).should('exist').and('be.visible');
@@ -41,7 +44,10 @@ describe('USERS LIST PAGE',function(){
 
         it('shows a message on empty users response', function(){
 
-            cy.intercept('**/users', []).as('emptyUsers');
+            cy.intercept('GET', 'users', {
+                statusCode: 200,
+                body: []
+            }).as('emptyUsers');
 
             //TODO:: create copy in branch lang-text
             cy.findByText('no users found').should('exist').and('be.visible');
@@ -49,6 +55,12 @@ describe('USERS LIST PAGE',function(){
         })
 
         it('handles user api failure gracefully', function(){
+            cy.intercept('GET', 'users', {
+                statusCode: 500,
+            }).as('failedUsers');
+
+            //TODO:: create copy in branch lang-text
+            cy.findByText('could not load users, refresh to retry').should('exist').and('be.visible');
 
         })
 
@@ -58,9 +70,23 @@ describe('USERS LIST PAGE',function(){
 
         it('reaches creation page on "new" button click', function(){
 
+            cy.findByText(lang.users.actions.add).click();
+
+            cy.url().should('include', '/create');
+
         })
 
         it('reaches a certain user show/edit page on list link click', function(){
+            const fakeUsersList = new Array(1).map((_, idx) => ({id: idx + 1,  name: faker.fake("{{name.lastName}}} {{name.firstName}}") }));
+
+            cy.intercept('GET', 'users', {
+                statusCode: 200,
+                body: fakeUsersList
+            }).as('allUsers');
+
+            cy.findByText((fakeUsersList[0].name)).click();
+
+            cy.url().should('include', `/user/${fakeUsersList[0].id}`);
 
         })
 
