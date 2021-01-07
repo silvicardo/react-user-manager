@@ -6,11 +6,14 @@ const lang = {
         name: 'name',
         friends: 'friends',
         noFriends: 'this user still has no friends',
+        editName: 'edit username',
         actions : {
+            edit: 'edit friends',
             remove: 'remove',
-            add : 'new',
+            add : 'new friend',
             select : 'select friend',
             create: 'save',
+            pick: 'pick'
         },
         errors : {
             list: {
