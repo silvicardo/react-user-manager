@@ -1,16 +1,16 @@
 {
   "users": [
     {
-      "id": 1,
-      "name": "Riccardo Silvi",
+      "name": "Riccardo Stratton",
       "createdAt": 1610053109277,
-      "updatedAt": 1610053109277
+      "updatedAt": 1610138181518,
+      "id": 1
     },
     {
-      "id": 2,
-      "name": "Davide Mangia",
+      "name": "Davide Manez",
       "createdAt": 1610053109277,
-      "updatedAt": 1610053109277
+      "updatedAt": 1610138153342,
+      "id": 2
     },
     {
       "id": 3,
@@ -61,11 +61,6 @@
       "id": 4,
       "ownerId": 3,
       "userId": 2
-    },
-    {
-      "id": 5,
-      "ownerId": 4,
-      "userId": 1
     }
   ]
 }
