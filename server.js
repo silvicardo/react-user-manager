@@ -25,6 +25,7 @@ server.get('/user/:userid/friends', async (req, res) => {
         })));
 
     } catch (e) {
+        //LOG FAILURES TO SERVICE....
         return res.status(500).jsonp({ error: e, message: e.message})
     }
 
@@ -48,39 +49,66 @@ server.get('/user/:userid/not-friends', async (req, res) => {
         return res.jsonp(notFriendsResponse.data);
 
     } catch(e){
-
+        //LOG FAILURES TO SERVICE....
         return res.status(500).jsonp({ error: e})
     }
 
 })
 
-//POST - USER CREATE (DUPLICATE CHECK)
+//POST - USER CREATE (DUPLICATE CHECK + FRIENDSHIPS CREATION)
 server.post('/user/create', async (req, res) => {
+
+    const {newFriendsIds, ...newUser} = req.body;
+    const timestamp = Date.now();
+    let createdUser = {};
+
     try {
 
-        const {data} = await axios.get(`${API_URL}/users?name_like=${req.body.name}`);
+        const {data: existingUsersWithName} = await axios.get(`${API_URL}/users?name_like=${req.body.name}`);
 
-        if(data.length > 0){
-            return res.status(403).jsonp({ error: 'Duplicates not permitted'});
+        if(existingUsersWithName.length > 0){
+            return res.status(403).jsonp({ error: 'Duplicate names not permitted'});
         }
 
-        req.body.createdAt = Date.now();
-        req.body.updatedAt = Date.now();
+        const {data : createdUserData} = await axios.post(`${API_URL}/users`, {...newUser, createdAt: timestamp, updatedAt: timestamp});
 
-        const createdUserResponse = await axios.post(`${API_URL}/users`, req.body);
-
-        return res.jsonp(createdUserResponse.data);
+        createdUser = createdUserData;
 
     } catch (e){
+        //for the sake of brevity just rejecting
+        //it would be good to handle edge cases:
+        // ---> one of friendships promises fails
         return res.status(500).jsonp({ error: e})
     }
+
+    //at this point user is created anyway so friendships create failure should not trigger a bad request response
+    //for the sake of brevity - just attempting friendships create in groups and respond with created user
+
+    if(newFriendsIds) {
+        try {
+            //for the sake of brevity just posting
+            //it would be good to handle edge cases:
+            // ---> prevent existing friendship re-post (do not blindly trust client)
+            await Promise.all(
+                [...new Set(newFriendsIds)].map(id =>
+                    axios.post(`${API_URL}/friendships`, {ownerId: createdUser.id, friendId: id, createdAt: timestamp})
+                )
+            );
+
+        } catch (e) {
+            //LOG FAILURES TO SERVICE....
+        }
+    }
+    return res.jsonp(createdUser);
 })
 
 //PUT - USER EDIT (DUPLICATE CHECK)
 server.put('/user/:userid/edit', async (req, res) => {
 
     const {userid} = req.params;
-    const {name} = req.body;
+    const {name, newFriendsIds, deletingFriendshipsIds} = req.body;
+    let updatedUser = {};
+    const timestamp = Date.now();
 
     try {
         const userByIdResponse = await axios.get(`${API_URL}/users/${userid}`);
@@ -100,21 +128,56 @@ server.put('/user/:userid/edit', async (req, res) => {
         const userUpdates = {
             name,
             createdAt: userByIdResponse.data.createdAt,
-            updatedAt: Date.now()
+            updatedAt: timestamp
         }
 
-        const createdUserResponse = await axios.put(`${API_URL}/users/${userid}`, userUpdates);
-
-        return res.jsonp(createdUserResponse.data);
-
+        const {data} = await axios.put(`${API_URL}/users/${userid}`, userUpdates);
+        updatedUser = data;
 
     } catch (e){
-        return res.status(500).jsonp({ error: e})
+        return res.status(500).jsonp({ error: e })
     }
+
+    //at this point user is updated anyway so friendships create-delete  failure should not trigger a bad request response
+    //for the sake of brevity - just attempting friendships create-delete in groups and respond with updated user
+
+    if(newFriendsIds) {
+        try {
+            //for the sake of brevity just posting
+            //it would be good to handle edge cases:
+            // ---> prevent existing friendship re-post (do not blindly trust client)
+            await Promise.all(
+                [...new Set(newFriendsIds)].map(id =>
+                    axios.post(`${API_URL}/friendships`, {ownerId: updatedUser.id, friendId: id, createdAt: timestamp})
+                )
+            );
+
+        } catch (e) {
+            //LOG FAILURES TO SERVICE....
+        }
+    }
+
+    if(deletingFriendshipsIds){
+
+        try {
+            //for the sake of brevity just deleting
+            //it would be good to handle edge cases:
+            // ---> delete friendship where editing user is not correct (do not blindly trust client)
+            await Promise.all(
+                [...new Set(deletingFriendshipsIds)].map(id =>
+                    axios.delete(`${API_URL}/friendships/${id}`)
+                )
+            );
+
+        } catch (e) {
+            //LOG FAILURES TO SERVICE....
+        }
+    }
+
+    return res.jsonp(updatedUser);
 })
 
-//DELETE - FRIENDSHIP (regular json server -> friendships/5 )
-
+//DELETE - FRIENDSHIP (regular json server -> friendships/:friendshipid )
 
 server.use(jsonServer.rewriter({
     '/user/:userid/unfriend/:friendid': `/friendships?_expand=user&ownerId=:userid`
