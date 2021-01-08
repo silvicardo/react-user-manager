@@ -26,5 +26,4 @@ yarn-error.log*
 .eslintcache
 
 # json-server
-
 db.json
