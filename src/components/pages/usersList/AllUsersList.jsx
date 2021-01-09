@@ -1,6 +1,7 @@
 import React from 'react';
 import UserListItem from '../../common/UserListItem';
 import UserEditPageLink from "./UserEditPageLink";
+import lang from "../../../lang";
 
 export const AllUsersList = ({className = '', users}) => {
 
@@ -11,7 +12,7 @@ export const AllUsersList = ({className = '', users}) => {
                     key={user.id}
                     className={'list-group-item'}
                 >
-                    <UserEditPageLink>
+                    <UserEditPageLink id={user.id}>
                         {user.name}
                     </UserEditPageLink>
                 </UserListItem>

@@ -1,3 +1,5 @@
+import React from "react";
+
 const lang = {
     users : {
         new: 'new user',
@@ -23,7 +25,13 @@ const lang = {
                 existingUserName: 'an user with this name is already registered',
                 apiOrNetworkFailure: 'could not save user',
             }
+        },
+        fetching: {
+            loadingUsers: 'give me a second...',
         }
+    },
+    routes: {
+        notFound: "Where are you going?"
     }
 }
 

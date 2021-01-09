@@ -1,9 +1,9 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 
 const API_URL = window.Cypress ? 'http://localhost:3001' : process.env.REACT_APP_API_URL
 
-export default function useUsers(){
+export default function useUsers(deps = []){
 
     const [appUsers, setAppUsers] = useState([]);
     const [isFetching, setIsFetching] = useState(false);
@@ -11,7 +11,7 @@ export default function useUsers(){
 
     const fetchUsers = async () => {
 
-        if(isFetching) return true;
+        if(isFetching === true) return;
 
         setIsFetching(true);
         setApiError('');
@@ -27,6 +27,12 @@ export default function useUsers(){
 
     }
 
-    return [appUsers, isFetching, apiError, fetchUsers]
+    useEffect(() => {
+        (async () => {
+            await fetchUsers()
+        })()
+    },deps)
+
+    return [appUsers, isFetching, apiError];
 
 }

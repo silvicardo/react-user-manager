@@ -15,7 +15,7 @@ export const UserEditPage = ({className = ''}) => {
     const [onSubmit, isSubmitting, submitError] = useUserSubmit(userid);
 
     return (
-        <div className={`user-edit-page ${className}`}>
+        <div className={`user-edit-page container py-3 ${className}`}>
             <div className={'d-flex justify-content-between mb-5'}>
                 <PageTitle className={'text-capitalize'}>{stored.username}</PageTitle>
                 <SaveButton onClick={onSubmit} />
