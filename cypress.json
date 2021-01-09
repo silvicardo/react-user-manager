@@ -4,6 +4,7 @@
   "componentFolder": "cypress/component",
   "ignoreTestFiles": "**/examples/*.spec.js",
   "env" : {
-    "coverage": false
+    "coverage": false,
+    "REACT_APP_API_URL": "http://localhost:3001"
   }
 }

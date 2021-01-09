@@ -31,7 +31,7 @@
       "id": 5
     },
     {
-      "name": "Giacomo Cherubini",
+      "name": "Roberto Simoni",
       "createdAt": 1610053125390,
       "updatedAt": 1610053125390,
       "id": 6
@@ -41,31 +41,13 @@
     {
       "id": 1,
       "ownerId": 1,
-      "userId": 1,
+      "userId": 2,
       "createdAt": 1610053109277
     },
     {
       "id": 2,
       "ownerId": 1,
-      "userId": 2,
-      "createdAt": 1610053109277
-    },
-    {
-      "id": 2,
-      "ownerId": 2,
       "userId": 3,
-      "createdAt": 1610053109277
-    },
-    {
-      "id": 3,
-      "ownerId": 3,
-      "userId": 2,
-      "createdAt": 1610053109277
-    },
-    {
-      "id": 4,
-      "ownerId": 4,
-      "userId": 1,
       "createdAt": 1610053109277
     }
   ]

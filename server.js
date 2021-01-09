@@ -4,7 +4,7 @@ const server = jsonServer.create()
 const router = jsonServer.router('db.json')
 const middlewares = jsonServer.defaults();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const API_URL = `http://localhost:${PORT}`;
 
 server.use(middlewares)
@@ -40,7 +40,7 @@ server.get('/user/:userid/not-friends', async (req, res) => {
 
         const {data} = await axios.get(`${API_URL}/friendships?_expand=user&ownerId=${subjectId}`);
 
-        const friendsIds = [...new Set(data.map(friend => friend.id))];
+        const friendsIds = [...new Set(data.map(friend => friend.userId))];
 
         const excludedUsersIdQueryString =  [subjectId, ...friendsIds].map(id => `id_ne=${id}`).join('&');
 
@@ -186,5 +186,5 @@ server.use(jsonServer.rewriter({
 server.use(router)
 
 server.listen(PORT, () => {
-    console.log('JSON Server is running')
+    console.log('JSON Server is running on PORT ', PORT)
 })

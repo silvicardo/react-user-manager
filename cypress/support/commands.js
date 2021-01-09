@@ -23,6 +23,6 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-
+import 'cypress-wait-until';
 import '@testing-library/cypress/add-commands';
 require('@cypress/react/support');
