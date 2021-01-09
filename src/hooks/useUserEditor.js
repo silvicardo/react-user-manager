@@ -47,10 +47,12 @@ export const makeFriendEditCreateReducer = () => {
         SET_USER_TO_BE_UNRELATED: (state, action) => {
 
             const toDeleteFriendId  = action.payload;
-            const removingFriendshipId = state.stored.friends.find(friend => friend.id === toDeleteFriendId).friendshipId;
+            const storedRemovingFriend = state.stored.friends.find(friend => friend.id === toDeleteFriendId);
+
 
             state.next.friendsIds = state.next.friendsIds.filter(friendId => friendId !== toDeleteFriendId);
-            state.next.removingFriendshipsIds.push(removingFriendshipId);
+            if(storedRemovingFriend && storedRemovingFriend.friendshipId)
+            state.next.removingFriendshipsIds.push(storedRemovingFriend.friendshipId);
             state.next.unrelatedUsersIds.push(toDeleteFriendId);
 
         },
