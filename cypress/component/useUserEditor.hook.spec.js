@@ -3,6 +3,15 @@ import mount from '@cypress/react'
 import useUserEditor from "../../src/hooks/useUserEditor";
 import ReactJson from 'react-json-view'
 
+// Cypress team suggests "Test The Interface Not The Implementation."
+// https://glebbahmutov.com/blog/test-the-interface/
+
+// Testing library docs states "The more your tests resemble the way your software is used, the more confidence they can give you."
+
+// I totally agree with that but testing the implementation of an hook at the highest level before the UI
+// helps me isolate + validate with confidence hook logic
+
+
 describe('useUserEditor hook',function(){
 
     beforeEach(function () {
@@ -56,6 +65,8 @@ describe('useUserEditor hook',function(){
                 expect(this.hookData.state.stored.friends).to.deep.equal(this.userFriendsJson);
                 expect(this.hookData.state.stored.unrelatedUsers).to.have.length(this.userNotFriendsJson.length);
                 expect(this.hookData.state.stored.unrelatedUsers).to.deep.equal(this.userNotFriendsJson);
+                expect(this.hookData.friends).to.deep.equal(this.userFriendsJson);
+                expect(this.hookData.notFriends).to.deep.equal(this.userNotFriendsJson);
             });
 
     })
@@ -82,6 +93,11 @@ describe('useUserEditor hook',function(){
                 expect(this.hookData.state.next.friendsIds[0]).to.equal(nextFriendId)
                 expect(this.hookData.state.next.friendsIds).to.have.length(1)
 
+                expect(this.hookData.state.next.removingFriendshipsIds).to.have.length(0)
+                expect(this.hookData.state.next.unrelatedUsersIds).to.have.length(0)
+
+                expect(this.hookData.friends.find(friend => friend.id === nextFriendId)).to.exist;
+                expect(this.hookData.notFriends.find(friend => friend.id === nextFriendId)).to.be.undefined;
             });
 
     })
@@ -107,11 +123,16 @@ describe('useUserEditor hook',function(){
 
                 this.hookData.onSetUserToBeUnrelated(deletingFriendId)
 
+                expect(this.hookData.state.next.friendsIds).to.have.length(0)
+
                 expect(this.hookData.state.next.removingFriendshipsIds).to.have.length(1)
-                expect(this.hookData.state.next.removingFriendshipsIds[0]).to.equal(deletingFriendshipId)
+                expect(this.hookData.state.next.removingFriendshipsIds[0]).to.equal(deletingFriendshipId);
 
                 expect(this.hookData.state.next.unrelatedUsersIds).to.have.length(1)
                 expect(this.hookData.state.next.unrelatedUsersIds[0]).to.equal(deletingFriendId)
+
+                expect(this.hookData.friends.find(friend => friend.id === deletingFriendId)).to.be.undefined;
+                expect(this.hookData.notFriends.find(friend => friend.id === deletingFriendId)).to.exist;
 
             });
 
