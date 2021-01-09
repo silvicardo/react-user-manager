@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import axios from "axios";
 
-
 export default function useUserSubmit(userId = ''){
 
     const apiUrl = userId ? `/user/${userId}/edit`  : '/user/create';
@@ -20,6 +19,7 @@ export default function useUserSubmit(userId = ''){
         try {
             const {data} = await axios[method](apiUrl, submitData);
             setIsSubmitting(false);
+            return Promise.resolve(data)
         } catch (e) {
             setSubmitError(e.message);
         }
