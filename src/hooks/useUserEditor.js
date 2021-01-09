@@ -10,10 +10,10 @@ export const getInitialUserEditorState = () => ({
         unrelatedUsers: [],
     },
     next: {
-        username: '',//API + UI
-        friendsIds: [],//API + UI
-        unrelatedUsersIds: [],//UI
-        removingFriendshipsIds: []//API
+        username: '',//API + UI -> stores nextUsername
+        friendsIds: [],//API + UI -> stores all friendsIds that user adds(including user that were friend at load, gets removed and re-added in the same session)
+        unrelatedUsersIds: [],//UI -> stores all unfriendedUserIds that user removes(only if they were already friends at load)
+        removingFriendshipsIds: []//API -> stores storedFriendships ids to remove
     },
 
 });
@@ -40,7 +40,7 @@ export const makeFriendEditCreateReducer = () => {
             state.next.friendsIds.push(nextFriendId);
             state.next.unrelatedUsersIds = state.next.unrelatedUsersIds.filter(unrelatedId => unrelatedId !== nextFriendId);
             if(alreadyStoredFriend && alreadyStoredFriend.friendshipId){
-                state.next.removingFriendshipsIds.filter(friendshipId => friendshipId !== alreadyStoredFriend.friendshipId);
+                state.next.removingFriendshipsIds = state.next.removingFriendshipsIds.filter(friendshipId => friendshipId !== alreadyStoredFriend.friendshipId);
             }
 
         },
