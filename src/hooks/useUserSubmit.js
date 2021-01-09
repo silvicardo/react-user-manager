@@ -3,7 +3,7 @@ import axios from "axios";
 
 const API_URL = window.Cypress ? 'http://localhost:3001' : process.env.REACT_APP_API_URL
 
-export default function useUserSubmit(userId = ''){
+export default function useUserSubmit(userId = null){
 
     const apiUrl = userId ? `${API_URL}/user/${userId}/edit`  : `${API_URL}/user/create`;
     const method = userId ? 'post' : 'put';

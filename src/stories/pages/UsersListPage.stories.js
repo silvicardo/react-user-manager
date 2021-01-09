@@ -1,5 +1,5 @@
 import React from 'react';
-import UsersListPage from "../components/pages/usersList/UsersListPage";
+import UsersListPage from "../../components/pages/usersList/UsersListPage";
 import {BrowserRouter} from "react-router-dom";
 
 export default {

@@ -53,6 +53,9 @@ export const makeFriendEditCreateReducer = () => {
             state.next.removingFriendshipsIds.push(removingFriendshipId);
             state.next.unrelatedUsersIds.push(toDeleteFriendId);
 
+        },
+        SET_NEXT_USERNAME: (state, action) => {
+            state.net.username = action.payload
         }
     })
 };
@@ -115,12 +118,18 @@ export default function useUserEditor(id = null){
         })
     }
 
+    const onNextUsernameChange = (value) => dispatch({
+        type: "SET_NEXT_USERNAME",
+        payload: value
+    })
+
     return {
         isFetchingUsers,
         state,
         friends,
         notFriends,
         onSetUserToBeFriend,
-        onSetUserToBeUnrelated
+        onSetUserToBeUnrelated,
+        onNextUsernameChange
     }
 }

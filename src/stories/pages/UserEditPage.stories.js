@@ -1,5 +1,5 @@
 import React from 'react';
-import UserEditPage from "../components/pages/userEdit/UserEditPage";
+import UserEditPage from "../../components/pages/userEdit/UserEditPage";
 
 export default {
     title: 'Pages/UserEditPage',
