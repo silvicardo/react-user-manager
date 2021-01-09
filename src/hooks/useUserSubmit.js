@@ -24,6 +24,7 @@ export default function useUserSubmit(userId = ''){
             return Promise.resolve(data)
         } catch (e) {
             setSubmitError(e.message);
+            return Promise.reject(e.message);
         }
 
     }
