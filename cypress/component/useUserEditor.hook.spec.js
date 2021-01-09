@@ -22,11 +22,16 @@ describe('useUserEditor hook',function(){
         this.MockComponent = (props) => {
 
             this.hookData = useUserEditor(props.userId);
-
+            if(props.isLogActive){
+                console.log(this.hookData)
+            }
             return (
                 <div style={{backgroundColor: 'rgb(39, 40, 34)'}}>
-                    <h1 style={{color: "white"}}>🤖 HOOK STATE 🤖</h1>
-                    <ReactJson src={this.hookData.state} theme={"monokai"} displayDataTypes={false} />
+                    <div style={{color: "white", textAlign: "center"}}>
+                        <h1 >🤖 hook return value 🤖</h1>
+                        {props.children}
+                    </div >
+                    <ReactJson src={this.hookData} theme={"monokai"} displayDataTypes={false} />
                 </div>
             )
 
@@ -62,7 +67,10 @@ describe('useUserEditor hook',function(){
         cy.intercept(`**/user/${this.userJson.id}/not-friends`, this.userNotFriendsJson)
 
         const HookMockerComponent = this.MockComponent;
-        mount(<HookMockerComponent userId={this.userJson.id}/>)
+        mount(
+            <HookMockerComponent userId={this.userJson.id}>
+                <h3>Setting to friend user with id {this.userNotFriendsJson[0].id}</h3>
+            </HookMockerComponent>)
 
         cy.waitUntil(() => this.hookData.state.stored.username == this.userJson.name)
             .then(() => {
@@ -85,14 +93,17 @@ describe('useUserEditor hook',function(){
         cy.intercept(`**/user/${this.userJson.id}/not-friends`, this.userNotFriendsJson)
 
         const HookMockerComponent = this.MockComponent;
-        mount(<HookMockerComponent userId={this.userJson.id}/>)
+        mount(
+            <HookMockerComponent userId={this.userJson.id}>
+                <h3>Unfriend user with id {this.userFriendsJson[0].id}</h3>
+            </HookMockerComponent>
+                )
 
         cy.waitUntil(() => this.hookData.state.stored.username == this.userJson.name)
             .then(() => {
 
                 const deletingFriendId = this.hookData.state.stored.friends[0].id;
                 const deletingFriendshipId = this.hookData.state.stored.friends[0].friendshipId
-
 
                 this.hookData.onSetUserToBeUnrelated(deletingFriendId)
 

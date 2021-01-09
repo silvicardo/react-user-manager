@@ -1,7 +1,7 @@
 import {useEffect, useReducer} from "react";
 import useUser from "./useUser";
 import {createReducer} from "@reduxjs/toolkit/dist/redux-toolkit.cjs.production.min";
-
+import useUsersByRelationship from "./useUsersByRelationship";
 
 export const makeFriendEditCreateReducer = () => {
     const initialState = getInitialUserEditorState()
@@ -14,21 +14,24 @@ export const makeFriendEditCreateReducer = () => {
             }
         },
         SET_USER_TO_BE_FRIEND: (state, action) => {
-            if(!state.next.friendsIds.includes(action.payload)){
-                state.next.friendsIds.push(action.payload)
+            const nextFriendId = action.payload;
+            const alreadyStoredFriend = state.stored.friends.find(friend => friend.id === nextFriendId);
+            state.next.friendsIds.push(nextFriendId);
+            state.next.unrelatedUsersIds.filter(unrelatedId => unrelatedId !== nextFriendId);
+            if(alreadyStoredFriend && alreadyStoredFriend.friendshipId){
+                state.next.removingFriendshipsIds.filter(friendshipId => friendshipId !== alreadyStoredFriend.friendshipId);
             }
+
         },
         SET_USER_TO_BE_UNRELATED: (state, action) => {
-            try {
-                const toDeleteFriendId  = action.payload;
-                const removingFriendshipId = state.stored.friends.find(friend => friend.id == toDeleteFriendId).friendshipId;
-                if(!state.next.removingFriendshipsIds.includes(removingFriendshipId)) {
-                    state.next.removingFriendshipsIds.push(removingFriendshipId)
-                    state.next.unrelatedUsersIds.push(toDeleteFriendId);
-                }
-            } catch(e){
 
-            }
+                const toDeleteFriendId  = action.payload;
+                const removingFriendshipId = state.stored.friends.find(friend => friend.id === toDeleteFriendId).friendshipId;
+
+                state.next.friendsIds.filter(friendId => friendId !== toDeleteFriendId);
+                state.next.removingFriendshipsIds.push(removingFriendshipId);
+                state.next.unrelatedUsersIds.push(toDeleteFriendId);
+
         }
     })
 }
@@ -51,14 +54,33 @@ export const getInitialUserEditorState = () => ({
 export default function useUserEditor(id = null){
 
     //db data
-    const [storedUsername, storedFriends, storedUnrelatedUsers, isFetchingUser, userApiError] = useUser(id);
+    const [
+        storedUsername,
+        storedFriends,
+        storedUnrelatedUsers,
+        isFetchingUsers,
+        userApiError
+    ] = useUser(id);
 
-    //editing data
+    //editing state + dispatch
 
-    const [state, dispatch] = useReducer(makeFriendEditCreateReducer(), getInitialUserEditorState(), getInitialUserEditorState);
+    const [state, dispatch] = useReducer(
+        makeFriendEditCreateReducer(),
+        getInitialUserEditorState(),
+        getInitialUserEditorState
+    );
+
+    const [friends, notFriends] = useUsersByRelationship(
+        state.stored.friends,
+        state.stored.unrelatedUsers,
+        state.next.friendsIds,
+        state.next.unrelatedUsersIds
+    );
+
+    // *** effects *** //
 
     useEffect(() => {
-        if(!isFetchingUser && storedUsername !== '' && !userApiError){
+        if(!isFetchingUsers && storedUsername !== '' && !userApiError){
             dispatch({
                 type: "SET_STORED_USER_DATA",
                 payload: {
@@ -69,7 +91,9 @@ export default function useUserEditor(id = null){
             })
         }
 
-    },[storedUsername, storedFriends, storedUnrelatedUsers, isFetchingUser])
+    },[storedUsername, storedFriends, storedUnrelatedUsers, isFetchingUsers])
+
+    // **** friend handling methods **** //
 
     const onSetUserToBeFriend = (userId) => {
         dispatch({
@@ -86,7 +110,10 @@ export default function useUserEditor(id = null){
     }
 
     return {
+        isFetchingUsers,
         state,
+        friends,
+        notFriends,
         onSetUserToBeFriend,
         onSetUserToBeUnrelated
     }

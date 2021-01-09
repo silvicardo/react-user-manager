@@ -14,14 +14,13 @@ export default function useUser(id = null) {
     useEffect(() => {
         setIsFetching(true);
         setApiError('');
-        //fetch user
+
         Promise.all([
             axios.get(`${API_URL}/users/${id}`),
             axios.get(`${API_URL}/user/${id}/friends`),
             axios.get(`${API_URL}/user/${id}/not-friends`),
         ])
             .then(( [{data: user}, {data: userFriends}, {data: userNotFriends}]) => {
-                console.log(user, userFriends, userNotFriends)
                 setUserId(user.id)
                 setUsername(user.name)
                 setFriends(userFriends);
