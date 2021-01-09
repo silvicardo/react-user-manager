@@ -36,7 +36,7 @@ export const UserEditPage = ({className = ''}) => {
             <div className={'py-3'}>
                 <UsernameTextField
                     className={'edit-username-field'}
-                    placeholder={`${lang.users.editName} (${})`}
+                    placeholder={`${lang.users.editName} (${storedUsername})`}
                     value={nextUsername}
                     onChange={(e) => onNextUsernameChange(e.target.value)}
                     identifier={'username-text-field'}
