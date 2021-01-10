@@ -5,6 +5,8 @@ import lang from "../../../lang";
 
 export const AllUsersList = ({className = '', users}) => {
 
+    if(users.length === 0) return <h2>{lang.users.emptyList}</h2>
+
     return (
         <ul className={`all-users-list list-group ${className}`}>
             {users.map(user => (

@@ -8,8 +8,6 @@ export const UsersListPage = ({className = '', users, isFetchingUsers, apiUsersE
 
     if(isFetchingUsers === true) return <p className={'loading'}>{lang.users.fetching.loadingUsers}</p>;
 
-    if(apiUsersError) return <p className={'error'}>{apiUsersError}</p>;
-
     return (
         <div className={`users-list-page container  py-3 ${className}`}>
             <div className={'d-flex justify-content-between mb-5'}>
@@ -17,7 +15,9 @@ export const UsersListPage = ({className = '', users, isFetchingUsers, apiUsersE
                 <LinkButton className={'btn btn-success btn-lg'} to={'/user/create'}>{lang.users.new}</LinkButton>
             </div>
             <div>
-                <AllUsersList users={users} />
+                <h2 className={`loading ${!isFetchingUsers ? 'd-none' : ''}`}>{lang.users.fetching.loadingUsers}</h2>
+                <h2 className={!apiUsersError ? 'd-none' : ''}>{lang.users.errors.list.apiOrNetworkFailure}</h2>
+                <AllUsersList className={apiUsersError || isFetchingUsers ? 'd-none' : ''} users={users} />
             </div>
 
         </div>
