@@ -26,3 +26,13 @@
 import 'cypress-wait-until';
 import '@testing-library/cypress/add-commands';
 require('@cypress/react/support');
+
+Cypress.Commands.add('shouldBeCalled', (alias, timesCalled) => {
+    const aliasname = alias.substring(1);
+    const requests = cy.state('requests') || [];
+
+    expect(
+        requests.filter((call) => call.alias === aliasname),
+        `${aliasname} should have been called ${timesCalled} times`
+    ).to.have.length(timesCalled);
+});

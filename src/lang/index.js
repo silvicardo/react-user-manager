@@ -1,5 +1,3 @@
-import React from "react";
-
 const lang = {
     users : {
         new: 'new user',
@@ -20,7 +18,7 @@ const lang = {
             remove: 'remove',
             add : 'new friend',
             select : 'select friend',
-            create: 'save',
+            submit: 'save',
             pick: 'pick'
         },
         errors : {
@@ -38,6 +36,17 @@ const lang = {
     },
     routes: {
         notFound: "Where are you going?"
+    },
+    server: {
+        editCreate: {
+            errors: {
+                noDuplicates: "Duplicates not permitted",
+                notUsersFault : "It was not your fault, please retry"
+            }
+        },
+        getUsers: {
+
+        }
     }
 }
 

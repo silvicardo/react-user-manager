@@ -26,7 +26,7 @@ export const FriendshipsEditor = ({className = '', userId = null, notYetFriends 
                     />
                     <LinkButton
                         className={`btn btn-success`}
-                        {...(!userId ? {to: '/user/create'} : {})}
+                        {...(userId ? {to: '/user/create'} : {})}
                         {...(onCreateNewUserClick ? {onClick: onCreateNewUserClick} : {})}
                     >
                         {lang.users.actions.add}

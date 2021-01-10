@@ -3,7 +3,6 @@ const jsonServer = require('json-server')
 const server = jsonServer.create()
 const router = jsonServer.router('db.json')
 const middlewares = jsonServer.defaults();
-
 const PORT = process.env.PORT || 3001;
 const API_URL = `http://localhost:${PORT}`;
 
@@ -71,7 +70,7 @@ server.post('/user/create', async (req, res) => {
         const {data: existingUsersWithName} = await axios.get(`${API_URL}/users?name_like=${req.body.name}`);
 
         if(existingUsersWithName.length > 0){
-            return res.status(403).jsonp({ error: 'Duplicate names not permitted'});
+            return res.status(403).jsonp({ error: "Duplicates not permitted"});
         }
 
         const {data : createdUserData} = await axios.post(`${API_URL}/users`, {name, createdAt: timestamp, updatedAt: timestamp});
@@ -124,7 +123,7 @@ server.put('/user/:userid/edit', async (req, res) => {
         const userWithSameNameResponse = await axios.get(`${API_URL}/users?name_like=${name}&id_ne=${userid}`);
 
         if(userWithSameNameResponse.data.length > 0) {
-            return res.status(403).jsonp({error: 'Duplicates not permitted'});
+            return res.status(403).jsonp({error: "Duplicates not permitted"});
         }
 
         const userUpdates = {

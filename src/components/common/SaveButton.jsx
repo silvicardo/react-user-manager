@@ -8,7 +8,7 @@ export const SaveButton = ({className = '', onClick}) => {
             className={`save-button btn btn-success ${className}`}
             onClick={onClick}
         >
-            {lang.users.actions.create}
+            {lang.users.actions.submit}
         </button>
     );
 };

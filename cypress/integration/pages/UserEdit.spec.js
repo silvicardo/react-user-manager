@@ -234,29 +234,180 @@ describe('USER SHOW EDIT PAGE', function(){
 
         })
 
-        //TODO:: reaches user creation page on create new friend click
-        it.skip('reaches user creation page on create new friend click', function(){
+        it('reaches user creation page on create new friend click', function(){
+            const userId = 1;
+            const visitingUrl = `/user/${userId}/edit`;
+            const friendName = this.userFriendsJson[0].name;
 
+            cy.intercept(`**/users/${this.userJson.id}`, this.userJson).as('getUser')
+            cy.intercept(`**/user/${this.userJson.id}/friends`, this.userFriendsJson).as('getUserFriends');
+            cy.intercept(`**/user/${this.userJson.id}/not-friends`, this.userNotFriendsJson).as('getUserNotFriends');
+
+            cy.visit(visitingUrl);
+            cy.wait('@getUser');
+            cy.wait('@getUserFriends');
+            cy.wait('@getUserNotFriends');
+
+            cy.findByText(lang.users.actions.add).should('exist').and('be.visible').click();
+            cy.url().should('include', 'user/create')
         })
 
     })
 
-    //TODO:: EDIT SUBMIT TESTS
-    describe.skip('submit', function(){
+    describe('submit', function(){
 
-        it('cannot submit a new name already existing in users list', function(){
+        it('cannot submit a name already existing in users list', function(){
+            const userId = 1;
+            const visitingUrl = `/user/${userId}/edit`;
+            const duplicateUsername = this.usersList[3].name;
+
+            cy.intercept(`**/users/${this.userJson.id}`, this.userJson).as('getUser')
+            cy.intercept(`**/user/${this.userJson.id}/friends`, this.userFriendsJson).as('getUserFriends');
+            cy.intercept(`**/user/${this.userJson.id}/not-friends`, this.userNotFriendsJson).as('getUserNotFriends');
+            cy.intercept('PUT',`**/user/${userId}/edit`, {
+                statusCode: 403,
+                body: {
+                    error: lang.server.editCreate.errors.noDuplicates
+                }
+            })
+
+            cy.visit(visitingUrl);
+            cy.wait('@getUser');
+            cy.wait('@getUserFriends');
+            cy.wait('@getUserNotFriends');
+
+            cy.focused().type(duplicateUsername).should('have.value', duplicateUsername);
+
+            cy.findByText(lang.users.actions.submit).should('exist').and('be.visible').click();
+            cy.findByText(lang.server.editCreate.errors.noDuplicates).should('exist').and('be.visible');
 
         })
 
         it('submits successfully and gets redirected to usersList page', function (){
+            const userId = 1;
+            const visitingUrl = `/user/${userId}/edit`;
+            const newUsername = "Non esisto";
+
+            cy.intercept(`**/users/${this.userJson.id}`, this.userJson).as('getUser')
+            cy.intercept(`**/user/${this.userJson.id}/friends`, this.userFriendsJson).as('getUserFriends');
+            cy.intercept(`**/user/${this.userJson.id}/not-friends`, this.userNotFriendsJson).as('getUserNotFriends');
+            cy.intercept('PUT',`**/user/${userId}/edit`, {
+                statusCode: 200,
+                body: {}
+            })
+
+            cy.visit(visitingUrl);
+            cy.wait('@getUser');
+            cy.wait('@getUserFriends');
+            cy.wait('@getUserNotFriends');
+
+            cy.focused().type(newUsername).should('have.value', newUsername);
+
+            cy.intercept('GET', '**/users', {
+                statusCode: 200,
+                body: this.usersList.map(user => {
+                    return user.id == userId ? {
+                        ...user,
+                        name: newUsername,
+                        createdAt: Date.now()
+                    } : user;
+                } )
+            }).as('allUsers');
+
+            cy.findByText(lang.users.actions.submit).should('exist').and('be.visible').click();
+
+            cy.url().should('equal',  `${Cypress.config().baseUrl}/`);
+
+            cy.findByText(newUsername).should('exist').and('be.visible')
 
         })
 
+        //USING DEPRECATED cy.server + route because same test with cy.intercept was failing
         it('attemps to submit, api fails once and succeeds on second attempt', function (){
+
+            const userId = 1;
+            const visitingUrl = `/user/${userId}/edit`;
+            const newUsername = "Non esisto";
+
+            cy.server();
+            cy.route(`**/users/${this.userJson.id}`, this.userJson).as('getUser')
+            cy.route(`**/user/${this.userJson.id}/friends`, this.userFriendsJson).as('getUserFriends');
+            cy.route(`**/user/${this.userJson.id}/not-friends`, this.userNotFriendsJson).as('getUserNotFriends');
+            cy.route({
+                method: 'PUT',
+                status: 500,
+                url: `**/user/${userId}/edit`,
+            }).as('submitUsersFailure')
+
+            cy.visit(visitingUrl);
+            cy.wait('@getUser');
+            cy.wait('@getUserFriends');
+            cy.wait('@getUserNotFriends');
+
+            cy.focused().type(newUsername).should('have.value', newUsername);
+
+            cy.route('GET', '**/users',this.usersList.map(user => {
+                return user.id == userId ? {
+                    ...user,
+                    name: newUsername,
+                    createdAt: Date.now()
+                } : user;
+            } )).as('allUsers');
+
+
+            cy.findByText(lang.users.actions.submit).should('exist').and('be.visible').click();
+            cy.wait('@submitUsersFailure');
+
+            cy.route('PUT',`/user/${userId}/edit`,{}).as('submitUsersSuccess');
+
+            cy.wait('@submitUsersSuccess');
+
+            cy.url().should('equal',  `${Cypress.config().baseUrl}/`);
+            cy.findByText(newUsername).should('exist').and('be.visible')
+            cy.shouldBeCalled('@submitUsersFailure', 1);
+            cy.shouldBeCalled('@submitUsersSuccess', 1);
 
         })
 
         it('attemps to submit, api fails twice, notifies user inviting to retry', function (){
+
+            const userId = 1;
+            const visitingUrl = `/user/${userId}/edit`;
+            const newUsername = "Non esisto";
+
+            cy.server();
+            cy.route(`**/users/${this.userJson.id}`, this.userJson).as('getUser')
+            cy.route(`**/user/${this.userJson.id}/friends`, this.userFriendsJson).as('getUserFriends');
+            cy.route(`**/user/${this.userJson.id}/not-friends`, this.userNotFriendsJson).as('getUserNotFriends');
+            cy.route({
+                method: 'PUT',
+                status: 500,
+                url: `**/user/${userId}/edit`,
+            }).as('submitUsersFailure')
+
+            cy.visit(visitingUrl);
+            cy.wait('@getUser');
+            cy.wait('@getUserFriends');
+            cy.wait('@getUserNotFriends');
+
+            cy.focused().type(newUsername).should('have.value', newUsername);
+
+            cy.route('GET', '**/users',this.usersList.map(user => {
+                return user.id == userId ? {
+                    ...user,
+                    name: newUsername,
+                    createdAt: Date.now()
+                } : user;
+            } )).as('allUsers');
+
+
+            cy.findByText(lang.users.actions.submit).should('exist').and('be.visible').click();
+
+            cy.url().should('equal',  `${Cypress.config().baseUrl}${visitingUrl}`);
+
+            cy.findByText(lang.server.editCreate.errors.notUsersFault).should('exist').and('be.visible')
+
+            cy.shouldBeCalled('@submitUsersFailure', 2);
 
         })
 

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import axios from "axios";
 import {getRetryableAxiosInstance} from "../helpers";
+import lang from "../lang";
 
 const API_URL = window.Cypress ? 'http://localhost:3001' : process.env.REACT_APP_API_URL
 
@@ -13,8 +13,8 @@ export default function useUserSubmit(userId = null){
     const [submitError, setSubmitError] = useState('');
 
     const shouldRetry = (currentRetryAttempt, failedAttemptAxiosError) => {
-
-        if(currentRetryAttempt <= 1){
+        console.log('currentRetryAttempt',currentRetryAttempt)
+        if(currentRetryAttempt < 1){
 
             if(!failedAttemptAxiosError.response){
                 return true;
@@ -44,7 +44,7 @@ export default function useUserSubmit(userId = null){
             setIsSubmitting(false);
             return Promise.resolve(data)
         } catch (e) {
-            setSubmitError(e.response ? e.response.data.error : e.message);
+            setSubmitError(e.response ? e.response.data.error : lang.server.editCreate.errors.notUsersFault);
             setIsSubmitting(false);
             return Promise.reject(e.message);
         }
