@@ -1,7 +1,7 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom'
 
-export const LinkButton = ({className = '', to, onClick= null, children}) => {
+export const LinkButton = ({className = '', to = null, onClick= null, children}) => {
 
     const history = useHistory();
 
@@ -9,8 +9,12 @@ export const LinkButton = ({className = '', to, onClick= null, children}) => {
         <button
             className={`link-button ${className}`}
             onClick={(event) => {
-                onClick && onClick(event)
-                history.push(to)
+                if(onClick){
+                    onClick(event)
+                }
+                if(to){
+                    history.push(to)
+                }
             }}
         >
             {children}

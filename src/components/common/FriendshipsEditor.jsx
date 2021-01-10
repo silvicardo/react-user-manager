@@ -7,7 +7,7 @@ import SelectableFriendsList from "./SelectableFriendsList";
 import FriendsEditLabel from "./FriendsEditLabel";
 import EditFriendsButton from "./EditFriendsButton";
 
-export const FriendshipsEditor = ({className = '', notYetFriends , friends, onPickFriendClick, onUnfriendClick }) => {
+export const FriendshipsEditor = ({className = '', userId = null, notYetFriends , friends, onPickFriendClick, onUnfriendClick, onCreateNewUserClick = null }) => {
 
     const [activeView, setActiveView] = useState('edit')//pick | edit
 
@@ -25,8 +25,9 @@ export const FriendshipsEditor = ({className = '', notYetFriends , friends, onPi
                         onClick={() => setActiveView('edit')}
                     />
                     <LinkButton
-                        className={'btn btn-success'}
-                        to={'/user/create'}
+                        className={`btn btn-success`}
+                        {...(!userId ? {to: '/user/create'} : {})}
+                        {...(onCreateNewUserClick ? {onClick: onCreateNewUserClick} : {})}
                     >
                         {lang.users.actions.add}
                     </LinkButton>
