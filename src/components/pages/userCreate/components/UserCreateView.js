@@ -14,7 +14,7 @@ const UserCreateView = ({className  = '', style = {}, onCreateNewUserClick, onUs
         storedUsername,
         nextUsername, onNextUsernameChange,
         onSetUserToBeFriend, onSetUserToBeUnrelated,
-        submit, submitError
+        submit, isSubmitting, submitError
     ] = useEditCreateUser();
 
     const onSubmit = async () => {

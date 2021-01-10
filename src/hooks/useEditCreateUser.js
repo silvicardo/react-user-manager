@@ -15,7 +15,10 @@ export default function useEditCreateUser(userId = null){
         const submitData = {
             name: next.username,
             newFriendsIds : preventExistingFriendIdsResubmit(),
-            deletingFriendshipsIds : next.removingFriendshipsIds
+        }
+        if(userId){
+            submitData.deletingFriendshipsIds =  next.removingFriendshipsIds;
+            submitData.name = next.username && next.username.length > 0 ? next.username : stored.username;
         }
 
         try {
@@ -25,6 +28,6 @@ export default function useEditCreateUser(userId = null){
         }
     }
 
-    return [ friends, notFriends, stored.username, next.username, onNextUsernameChange, onSetUserToBeFriend, onSetUserToBeUnrelated, submit, submitError];
+    return [ friends, notFriends, stored.username, next.username, onNextUsernameChange, onSetUserToBeFriend, onSetUserToBeUnrelated, submit,isSubmitting,  submitError];
 
 }

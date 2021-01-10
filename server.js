@@ -58,9 +58,13 @@ server.get('/user/:userid/not-friends', async (req, res) => {
 //POST - USER CREATE (DUPLICATE CHECK + FRIENDSHIPS CREATION)
 server.post('/user/create', async (req, res) => {
 
-    const {newFriendsIds, ...newUser} = req.body;
+    const {newFriendsIds, name} = req.body;
     const timestamp = Date.now();
     let createdUser = {};
+
+    if(!name || name.length === 0){
+        return res.status(403).jsonp({ error: 'Please pass a not-empty name'});
+    }
 
     try {
 
@@ -70,7 +74,7 @@ server.post('/user/create', async (req, res) => {
             return res.status(403).jsonp({ error: 'Duplicate names not permitted'});
         }
 
-        const {data : createdUserData} = await axios.post(`${API_URL}/users`, {...newUser, createdAt: timestamp, updatedAt: timestamp});
+        const {data : createdUserData} = await axios.post(`${API_URL}/users`, {name, createdAt: timestamp, updatedAt: timestamp});
 
         createdUser = createdUserData;
 
@@ -91,7 +95,7 @@ server.post('/user/create', async (req, res) => {
             // ---> prevent existing friendship re-post (do not blindly trust client)
             await Promise.all(
                 [...new Set(newFriendsIds)].map(id =>
-                    axios.post(`${API_URL}/friendships`, {ownerId: createdUser.id, friendId: id, createdAt: timestamp})
+                    axios.post(`${API_URL}/friendships`, {ownerId: createdUser.id, userId: id, createdAt: timestamp})
                 )
             );
 
@@ -112,8 +116,6 @@ server.put('/user/:userid/edit', async (req, res) => {
 
     try {
         const userByIdResponse = await axios.get(`${API_URL}/users/${userid}`);
-
-        console.log(userByIdResponse.data)
 
         if(!userByIdResponse.data.id){
           return res.status(400).jsonp({ error: 'Attempting to edit not existing user'});
@@ -148,7 +150,7 @@ server.put('/user/:userid/edit', async (req, res) => {
             // ---> prevent existing friendship re-post (do not blindly trust client)
             await Promise.all(
                 [...new Set(newFriendsIds)].map(id =>
-                    axios.post(`${API_URL}/friendships`, {ownerId: updatedUser.id, friendId: id, createdAt: timestamp})
+                    axios.post(`${API_URL}/friendships`, {ownerId: updatedUser.id, userId: id, createdAt: timestamp})
                 )
             );
 

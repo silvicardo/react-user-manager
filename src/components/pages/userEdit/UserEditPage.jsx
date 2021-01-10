@@ -6,22 +6,26 @@ import FriendshipsEditor from "../../common/FriendshipsEditor";
 import UsernameTextField from "../../common/UsernameTextField";
 import {useParams} from "react-router";
 import useEditCreateUser from "../../../hooks/useEditCreateUser";
+import {useHistory} from "react-router-dom";
 
 const UserEditPage = ({className = ''}) => {
 
+    const history = useHistory();
+
     let { userid } = useParams();
+
     const [
         friends, notFriends,
         storedUsername,
         nextUsername, onNextUsernameChange,
         onSetUserToBeFriend, onSetUserToBeUnrelated,
-        submit, submitError
+        submit, isSubmitting, submitError
     ] = useEditCreateUser(userid);
 
     const onSubmit = async () => {
         try {
             const res = await submit()
-            //TODO:: CHANGE LOCATION BACK TO HOME
+            history.push('/');
         } catch (e) {
             //LOG TO SERVICE...
         }

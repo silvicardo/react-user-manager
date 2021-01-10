@@ -12,7 +12,7 @@ export default function useUser(id = null) {
     const [isFetching, setIsFetching] = useState(false);
     const [apiError, setApiError] = useState('');
 
-    const [appUsers, isApiAllUsersFetching, apiAllUsersError] = useUsers(!id);
+    const [appUsers, isApiAllUsersFetching, apiAllUsersError] = useUsers([!id]);
 
     //EDIT MODE
     const getUserDataById = useCallback(() => {

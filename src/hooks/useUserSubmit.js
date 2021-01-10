@@ -7,7 +7,7 @@ const API_URL = window.Cypress ? 'http://localhost:3001' : process.env.REACT_APP
 export default function useUserSubmit(userId = null){
 
     const apiUrl = userId ? `${API_URL}/user/${userId}/edit`  : `${API_URL}/user/create`;
-    const method = userId ? 'post' : 'put';
+    const method = userId ? 'put' : 'post';
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState('');
@@ -16,7 +16,11 @@ export default function useUserSubmit(userId = null){
 
         if(currentRetryAttempt <= 1){
 
-            if(failedAttemptAxiosError.status === 403 || failedAttemptAxiosError.status === 400 ){//403 : duplicate name, 400: invalid userid
+            if(!failedAttemptAxiosError.response){
+                return true;
+            }
+
+            if(failedAttemptAxiosError.response.status === 403 || failedAttemptAxiosError.response.status === 400 ){//403 : duplicate name, 400: invalid userid
                 return false;
             }
             //e.response means api returned other kind of error, otherwise it's missing network or other
@@ -40,7 +44,8 @@ export default function useUserSubmit(userId = null){
             setIsSubmitting(false);
             return Promise.resolve(data)
         } catch (e) {
-            setSubmitError(e.message);
+            setSubmitError(e.response ? e.response.data.error : e.message);
+            setIsSubmitting(false);
             return Promise.reject(e.message);
         }
 
