@@ -5,7 +5,7 @@ export default function useStackedViews(){
 
     const [viewsIds, setViewsIds] = useState([0]);
 
-    const onStackedViewDismiss = () => {
+    const dismissActiveStackView = () => {
         setViewsIds( prevViewsIds => prevViewsIds.length > 1 ? prevViewsIds.slice(0, -1) : prevViewsIds);
     }
 
@@ -13,6 +13,6 @@ export default function useStackedViews(){
         setViewsIds(prevViewsIds => [...prevViewsIds, prevViewsIds.length])
     }
 
-    return [viewsIds, onStackedViewDismiss, addViewToStack];
+    return [viewsIds, dismissActiveStackView, addViewToStack];
 
 }

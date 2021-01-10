@@ -2,13 +2,20 @@ import React from 'react';
 import useStackedViews from "../../../hooks/useStackedViews";
 import StackedView from "./components/StackedView";
 import UserCreateView from "./components/UserCreateView";
+import {useHistory} from "react-router-dom";
 
 const UserCreatePage = ({className = ''}) => {
 
-    const [stackedViewIds, onStackedViewDismiss, addViewToStack] = useStackedViews();
+    const history = useHistory();
+
+    const [stackedViewIds, dismissActiveStackView, addViewToStack] = useStackedViews();
 
     const onUserSubmitSuccess = () => {
-
+        if(stackedViewIds.length === 1) {
+            history.push('/');
+            return;
+        }
+        dismissActiveStackView();
     }
 
     return (
@@ -18,7 +25,7 @@ const UserCreatePage = ({className = ''}) => {
                     key={stackedViewId}
                     id={stackedViewId}
                     isActive={stackedViewId + 1 === stackedViewIds.length}
-                    onDismiss={onStackedViewDismiss}
+                    onDismiss={dismissActiveStackView}
                     contentContainerClass={'bg-white w-100 h-100 border-left border-dark'}
                     >
                         <UserCreateView
