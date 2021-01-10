@@ -14,7 +14,7 @@ const UserCreateView = ({className  = '', style = {}, onCreateNewUserClick, onUs
         storedUsername,
         nextUsername, onNextUsernameChange,
         onSetUserToBeFriend, onSetUserToBeUnrelated,
-        submit
+        submit, submitError
     ] = useEditCreateUser();
 
     const onSubmit = async () => {
@@ -34,6 +34,7 @@ const UserCreateView = ({className  = '', style = {}, onCreateNewUserClick, onUs
             </div>
             <div className={'py-3'}>
                 <UsernameTextField
+                    error={submitError}
                     className={'create-username-field'}
                     placeholder={lang.users.typeNewName}
                     value={nextUsername}

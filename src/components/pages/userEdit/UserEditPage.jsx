@@ -15,7 +15,7 @@ const UserEditPage = ({className = ''}) => {
         storedUsername,
         nextUsername, onNextUsernameChange,
         onSetUserToBeFriend, onSetUserToBeUnrelated,
-        submit
+        submit, submitError
     ] = useEditCreateUser(userid);
 
     const onSubmit = async () => {
@@ -35,6 +35,7 @@ const UserEditPage = ({className = ''}) => {
             </div>
             <div className={'py-3'}>
                 <UsernameTextField
+                    error={submitError}
                     className={'edit-username-field'}
                     placeholder={`${lang.users.editName} (${storedUsername})`}
                     value={nextUsername}

@@ -25,6 +25,6 @@ export default function useEditCreateUser(userId = null){
         }
     }
 
-    return [ friends, notFriends, stored.username, next.username, onNextUsernameChange, onSetUserToBeFriend, onSetUserToBeUnrelated, submit];
+    return [ friends, notFriends, stored.username, next.username, onNextUsernameChange, onSetUserToBeFriend, onSetUserToBeUnrelated, submit, submitError];
 
 }
