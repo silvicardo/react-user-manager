@@ -3,14 +3,14 @@ import {useState} from "react";
 
 export default function useStackedViews(){
 
-    const [viewsIds, setViewsIds] = useState([1]);
+    const [viewsIds, setViewsIds] = useState([0]);
 
     const onStackedViewDismiss = () => {
         setViewsIds( prevViewsIds => prevViewsIds.length > 1 ? prevViewsIds.slice(0, -1) : prevViewsIds);
     }
 
     const addViewToStack = () => {
-        setViewsIds(prevViewsIds => [...prevViewsIds, (prevViewsIds.length  + 1)])
+        setViewsIds(prevViewsIds => [...prevViewsIds, prevViewsIds.length])
     }
 
     return [viewsIds, onStackedViewDismiss, addViewToStack];

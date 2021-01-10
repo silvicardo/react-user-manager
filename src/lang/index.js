@@ -8,6 +8,7 @@ const lang = {
         name: 'name',
         friends: 'friends',
         noFriends: 'you have no friends!',
+        typeNewName: 'type desired username',
         editName: 'edit username',
         actions : {
             edit: 'edit friends',

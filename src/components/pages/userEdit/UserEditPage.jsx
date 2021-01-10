@@ -5,9 +5,9 @@ import SaveButton from "../../common/SaveButton";
 import FriendshipsEditor from "../../common/FriendshipsEditor";
 import UsernameTextField from "../../common/UsernameTextField";
 import {useParams} from "react-router";
-import useEditUser from "../../../hooks/useEditUser";
+import useEditCreateUser from "../../../hooks/useEditCreateUser";
 
-export const UserEditPage = ({className = ''}) => {
+const UserEditPage = ({className = ''}) => {
 
     let { userid } = useParams();
     const [
@@ -16,7 +16,7 @@ export const UserEditPage = ({className = ''}) => {
         nextUsername, onNextUsernameChange,
         onSetUserToBeFriend, onSetUserToBeUnrelated,
         submit
-    ] = useEditUser(userid);
+    ] = useEditCreateUser(userid);
 
     const onSubmit = async () => {
         try {
@@ -43,6 +43,7 @@ export const UserEditPage = ({className = ''}) => {
                 />
             </div>
             <FriendshipsEditor
+                userId={userid}
                 className={!storedUsername ? 'd-none' : ''}
                 friends={friends}
                 notYetFriends={notFriends}

@@ -3,6 +3,7 @@ import UserEditPage from "./pages/userEdit/UserEditPage";
 import useUsers from "../hooks/useUsers";
 import lang from "../lang";
 import UsersListPage from "./pages/usersList/UsersListPage";
+import UserCreatePage from "./pages/userCreate/UserCreatePage";
 
 const App = () => {
 
@@ -18,6 +19,9 @@ const App = () => {
           </Route>
           <Route path={'/user/:userid/edit'}>
             <UserEditPage />
+          </Route>
+          <Route path={'/user/create'}>
+            <UserCreatePage />
           </Route>
           <Route path={'*'}>
               <p>{lang.routes.notFound}</p>

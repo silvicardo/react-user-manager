@@ -1,4 +1,4 @@
-import {useEffect, useReducer} from "react";
+import {useEffect, useReducer, useRef} from "react";
 import useUser from "./useUser";
 import {createReducer} from "@reduxjs/toolkit/dist/redux-toolkit.cjs.production.min";
 import useUsersByRelationship from "./useUsersByRelationship";
@@ -31,6 +31,11 @@ export const makeFriendEditCreateReducer = () => {
                     state.stored[stateKey] = action.payload[stateKey]
                 }
             }
+            //reset next
+            state.next.username = '';
+            state.next.friendsIds = [];
+            state.next.unrelatedUsersIds = [];
+            state.next.removingFriendshipsIds = [];
 
         },
         SET_USER_TO_BE_FRIEND: (state, action) => {
@@ -69,9 +74,11 @@ export default function useUserEditor(id = null){
         storedUsername,
         storedFriends,
         storedUnrelatedUsers,
-        isFetchingUsers,
+        isFetchingUserData,
         userApiError
     ] = useUser(id);
+
+    const prevIsFetchingUserData = useRef(isFetchingUserData);
 
     //editing state + dispatch
 
@@ -91,7 +98,8 @@ export default function useUserEditor(id = null){
     // *** effects *** //
 
     useEffect(() => {
-        if(!isFetchingUsers && storedUsername !== '' && !userApiError){
+
+        const setStoredUserData = () => {
             dispatch({
                 type: "SET_STORED_USER_DATA",
                 payload: {
@@ -100,9 +108,20 @@ export default function useUserEditor(id = null){
                     unrelatedUsers: storedUnrelatedUsers,
                 }
             })
-        }
+        };
 
-    },[storedUsername, storedFriends, storedUnrelatedUsers, isFetchingUsers])
+        if(id){//EDIT MODE
+            if(!isFetchingUserData && storedUsername !== '' && !userApiError){
+                setStoredUserData();
+            }
+        } else {//CREATE MODE
+            if(prevIsFetchingUserData.current === true && isFetchingUserData === false && !userApiError){
+                setStoredUserData();
+            }
+        }
+        prevIsFetchingUserData.current = isFetchingUserData;
+
+    },[id, storedUsername, storedFriends, storedUnrelatedUsers, isFetchingUserData])
 
     // **** friend handling methods **** //
 
@@ -126,7 +145,7 @@ export default function useUserEditor(id = null){
     })
 
     return {
-        isFetchingUsers,
+        isFetchingUserData,
         state,
         friends,
         notFriends,

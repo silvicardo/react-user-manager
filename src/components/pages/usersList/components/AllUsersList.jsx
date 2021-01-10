@@ -1,7 +1,7 @@
 import React from 'react';
-import UserListItem from '../../common/UserListItem';
+import UserListItem from '../../../common/UserListItem';
 import UserEditPageLink from "./UserEditPageLink";
-import lang from "../../../lang";
+import lang from "../../../../lang";
 
 export const AllUsersList = ({className = '', users}) => {
 

@@ -1,7 +1,7 @@
 import useUserEditor from "./useUserEditor";
 import useUserSubmit from "./useUserSubmit";
 
-export default function useEditUser(userId){
+export default function useEditCreateUser(userId = null){
 
     const {state: {stored, next}, friends, notFriends, onNextUsernameChange, onSetUserToBeFriend, onSetUserToBeUnrelated} = useUserEditor(userId);
     const [onSubmit, isSubmitting, submitError] = useUserSubmit(userId);

@@ -2,7 +2,7 @@ import React from 'react';
 import PageTitle from "../../common/PageTitle";
 import lang from "../../../lang";
 import LinkButton from "../../common/LinkButton";
-import AllUsersList from "./AllUsersList";
+import AllUsersList from "./components/AllUsersList";
 
 export const UsersListPage = ({className = '', users, isFetchingUsers, apiUsersError}) => {
 

@@ -1,17 +1,22 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useCallback} from "react";
 import axios from "axios";
+import useUsers from "./useUsers";
 
 const API_URL = window.Cypress ? 'http://localhost:3001' : process.env.REACT_APP_API_URL
 
 export default function useUser(id = null) {
-    const [userId, setUserId] = useState(0);
+
     const [username, setUsername] = useState('');
     const [friends, setFriends] = useState([]);
     const [unrelatedUsers, setUnrelatedUsers] = useState([]);
     const [isFetching, setIsFetching] = useState(false);
     const [apiError, setApiError] = useState('');
 
-    useEffect(() => {
+    const [appUsers, isApiAllUsersFetching, apiAllUsersError] = useUsers(!id);
+
+    //EDIT MODE
+    const getUserDataById = useCallback(() => {
+
         setIsFetching(true);
         setApiError('');
 
@@ -21,7 +26,6 @@ export default function useUser(id = null) {
             axios.get(`${API_URL}/user/${id}/not-friends`),
         ])
             .then(( [{data: user}, {data: userFriends}, {data: userNotFriends}]) => {
-                setUserId(user.id)
                 setUsername(user.name)
                 setFriends(userFriends);
                 setUnrelatedUsers(userNotFriends)
@@ -32,7 +36,26 @@ export default function useUser(id = null) {
                 setIsFetching(false);
                 setApiError(e.message || 'whoooops')
             })
+    }, [id])
+
+    useEffect(() => {
+
+        if(id){
+            getUserDataById();
+        }
     },[id])
+
+    //CREATE MODE
+    useEffect(() => {
+        if(!id){
+            //useUsers will bring all users as not friends
+            setIsFetching(isApiAllUsersFetching);
+            setFriends([]);
+            setUnrelatedUsers(appUsers);
+            setApiError(apiAllUsersError);
+        }
+
+    },[id, isApiAllUsersFetching, appUsers])
 
     return [username, friends, unrelatedUsers, isFetching, apiError];
 };
