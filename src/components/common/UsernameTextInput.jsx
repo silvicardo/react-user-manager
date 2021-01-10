@@ -4,6 +4,7 @@ export const UsernameTextInput = ({className = '', placeholder = '', id, onChang
 
     return (
         <input
+            autoFocus={true}
             className={`username-input form-control ${className}`}
             id={id}
             type={'text'}

@@ -39,6 +39,7 @@ export const FriendshipsEditor = ({className = '', notYetFriends , friends, onPi
                         />
                     </div>
                     <div className={`edit-view ${activeView !== 'edit' ? 'd-none' : ''}`}>
+                        <h3 className={friends.length > 0 ? 'd-none' : '' }>{lang.users.noFriends}</h3>
                         <EditableFriendsList
                             friends={friends}
                             onUnfriendClick={onUnfriendClick}

@@ -57,7 +57,7 @@ export const makeFriendEditCreateReducer = () => {
 
         },
         SET_NEXT_USERNAME: (state, action) => {
-            state.net.username = action.payload
+            state.next.username = action.payload
         }
     })
 };

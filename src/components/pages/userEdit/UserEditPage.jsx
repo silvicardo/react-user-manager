@@ -43,6 +43,7 @@ export const UserEditPage = ({className = ''}) => {
                 />
             </div>
             <FriendshipsEditor
+                className={!storedUsername ? 'd-none' : ''}
                 friends={friends}
                 notYetFriends={notFriends}
                 onUnfriendClick={onSetUserToBeUnrelated}
