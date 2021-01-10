@@ -5,21 +5,22 @@ import lang from "../../../lang";
 
 export const AllUsersList = ({className = '', users}) => {
 
-    if(users.length === 0) return <h2>{lang.users.emptyList}</h2>
-
     return (
-        <ul className={`all-users-list list-group ${className}`}>
-            {users.map(user => (
-                <UserListItem
-                    key={user.id}
-                    className={'list-group-item'}
-                >
-                    <UserEditPageLink id={user.id}>
-                        {user.name}
-                    </UserEditPageLink>
-                </UserListItem>
-            ))}
-        </ul>
+        <div className={`${className}`}>
+            <h2 className={users.length > 0 ? 'd-none': ''}>{lang.users.emptyList}</h2>
+            <ul className={`all-users-list list-group `}>
+                {users.map(user => (
+                    <UserListItem
+                        key={user.id}
+                        className={'list-group-item'}
+                    >
+                        <UserEditPageLink id={user.id}>
+                            {user.name}
+                        </UserEditPageLink>
+                    </UserListItem>
+                ))}
+            </ul>
+        </div>
     );
 };
 

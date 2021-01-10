@@ -6,8 +6,6 @@ import AllUsersList from "./AllUsersList";
 
 export const UsersListPage = ({className = '', users, isFetchingUsers, apiUsersError}) => {
 
-    if(isFetchingUsers === true) return <p className={'loading'}>{lang.users.fetching.loadingUsers}</p>;
-
     return (
         <div className={`users-list-page container  py-3 ${className}`}>
             <div className={'d-flex justify-content-between mb-5'}>
