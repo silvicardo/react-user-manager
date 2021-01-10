@@ -62,6 +62,7 @@
     "@storybook/preset-create-react-app": "^3.1.5",
     "@storybook/react": "^6.1.11",
     "@testing-library/cypress": "^7.0.3",
+    "faker": "^5.1.0",
     "cypress": "^6.2.0",
     "cypress-wait-until": "^1.7.1",
     "json-server": "^0.16.3",
