@@ -10,6 +10,11 @@ const lang = {
         noFriends: 'you have no friends!',
         typeNewName: 'type desired username',
         editName: 'edit username',
+        stackViews: {
+            areYouSureToDismiss: 'Are you sure you want to dismiss current operation?',
+            dismiss: 'Dismiss',
+            stay: 'Continue'
+        },
         actions : {
             edit: 'edit friends',
             remove: 'remove',
