@@ -16,10 +16,13 @@ const StackedView = ({className = '', id, isActive, onDismiss, children, content
                 }}
                 onClick={() => setIsAttemptingDismissing(true)}
             />
-            <div className={`active-view ${contentContainerClass} position-relative`} style={{overflowY: isAttemptingDismiss? 'hidden': 'auto'}}>
+            <div
+                className={`active-view ${contentContainerClass} position-relative`}
+                style={{overflowY: isAttemptingDismiss? 'hidden': 'auto'}}
+            >
                 {children}
                 <div
-                    className={`confirm dismiss-area position-absolute ${!isAttemptingDismiss ? 'd-none' : 'd-flex flex-column justify-content-center align-items-center'}`}
+                    className={`confirm dismiss-area ${!isAttemptingDismiss ? 'd-none' : 'position-absolute d-flex flex-column justify-content-center align-items-center'}`}
                     style={{
                         backgroundColor: `rgba(0, 0, 0, 0.8)`,
                         top:0,
