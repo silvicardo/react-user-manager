@@ -1,3 +1,4 @@
+import lang from "../../../src/lang";
 
 describe('USER CREATE PAGE', function(){
 
