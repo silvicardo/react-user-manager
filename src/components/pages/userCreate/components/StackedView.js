@@ -6,8 +6,9 @@ const StackedView = ({className = '', id, isActive, onDismiss, children, content
     const [isAttemptingDismiss, setIsAttemptingDismissing] = useState(false);
 
     return (
-        <div key={id} className={`stacked-view position-absolute w-100 h-100 d-flex ${className}`}>
+        <div key={id} data-cy={'stack-view'} className={`stacked-view position-absolute w-100 h-100 d-flex ${className}`}>
             <div
+                data-cy={'stack-view-dismiss-area'}
                 className={'opaque-dismiss-area'}
                 style={{
                     width: id < 15 ? `${id * 50}px` : '750px',
@@ -17,6 +18,7 @@ const StackedView = ({className = '', id, isActive, onDismiss, children, content
                 onClick={() => setIsAttemptingDismissing(true)}
             />
             <div
+                data-cy={'stack-view-content-area'}
                 className={`active-view ${contentContainerClass} position-relative`}
                 style={{overflowY: isAttemptingDismiss? 'hidden': 'auto'}}
             >

@@ -5,7 +5,7 @@ import UnfriendButton from "./UnfriendButton";
 export const EditableFriendsList = ({className = '', friends,  onUnfriendClick}) => {
 
     return (
-        <ul className={`editable-friends-list ${className}`}>
+        <ul data-cy={'friends-list'} className={`editable-friends-list ${className}`}>
             {friends.map(friend =>(
                 <UserListItem
                     key={friend.id}

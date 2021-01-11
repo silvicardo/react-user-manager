@@ -5,7 +5,7 @@ import UserListItem from "./UserListItem";
 export const SelectableFriendsList = ({className = '', users : notYetFriends, onPickFriendClick}) => {
 
     return (
-        <ul className={`selectable-friends-list ${className}`}>
+        <ul data-cy={'not-yet-friends-list'} className={`selectable-friends-list ${className}`}>
             {notYetFriends.map(user => (
                 <UserListItem
                     key={user.id}

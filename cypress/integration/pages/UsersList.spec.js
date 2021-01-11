@@ -109,8 +109,7 @@ describe('USERS LIST PAGE',function(){
 
     describe('navigation', function(){
 
-        //TODO:: REACTIVATE WHEN CREATE PAGE OK
-        it.skip('reaches creation page on "new" button click', function(){
+        it('reaches creation page on "new" button click', function(){
 
             cy.intercept('GET', '**/users', {
                 statusCode: 200,

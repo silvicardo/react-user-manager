@@ -237,7 +237,6 @@ describe('USER SHOW EDIT PAGE', function(){
         it('reaches user creation page on create new friend click', function(){
             const userId = 1;
             const visitingUrl = `/user/${userId}/edit`;
-            const friendName = this.userFriendsJson[0].name;
 
             cy.intercept(`**/users/${this.userJson.id}`, this.userJson).as('getUser')
             cy.intercept(`**/user/${this.userJson.id}/friends`, this.userFriendsJson).as('getUserFriends');
