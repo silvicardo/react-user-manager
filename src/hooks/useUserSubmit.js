@@ -13,7 +13,7 @@ export default function useUserSubmit(userId = null){
     const [submitError, setSubmitError] = useState('');
 
     const shouldRetry = (currentRetryAttempt, failedAttemptAxiosError) => {
-        console.log('currentRetryAttempt',currentRetryAttempt)
+
         if(currentRetryAttempt < 1){
 
             if(!failedAttemptAxiosError.response){
