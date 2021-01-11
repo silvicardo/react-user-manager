@@ -1,8 +1,8 @@
 import React from 'react';
-import EditableFriendsList from "../components/common/EditableFriendsList";
+import EditableFriendsList from "../../../components/common/sections/friendshipsEditor/EditableFriendsList";
 
 export default {
-    title: 'EditableFriendsList',
+    title: 'Sections/FriendshipsEditor/EditableFriendsList',
     component: EditableFriendsList,
     argTypes: {
         className: {control: 'text'},

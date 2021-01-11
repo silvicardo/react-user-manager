@@ -1,8 +1,8 @@
 import React from 'react';
-import SelectableFriendsList from "../components/common/SelectableFriendsList";
+import SelectableFriendsList from "../../../components/common/sections/friendshipsEditor/SelectableFriendsList";
 
 export default {
-    title: 'SelectableFriendsList',
+    title: 'Sections/FriendshipsEditor/SelectableFriendsList',
     component: SelectableFriendsList,
     argTypes: {
         className: {control: 'text'},

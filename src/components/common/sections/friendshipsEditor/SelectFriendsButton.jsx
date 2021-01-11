@@ -1,5 +1,5 @@
 import React from 'react';
-import lang from "../../lang";
+import lang from "../../../../lang";
 
 export const SelectFriendsButton = ({className = '', onClick}) => {
 

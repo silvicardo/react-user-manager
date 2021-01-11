@@ -1,0 +1,18 @@
+[
+  {
+    "friendshipId": 1,
+    "ownerId": 1,
+    "id": 2,
+    "name": "Davide Mangia",
+    "createdAt": 1610053109277,
+    "updatedAt": 1610053109277
+  },
+  {
+    "friendshipId": 2,
+    "ownerId": 1,
+    "id": 3,
+    "name": "Roberto Serio",
+    "createdAt": 1610053109277,
+    "updatedAt": 1610053109277
+  }
+]

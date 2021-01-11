@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import EditableFriendsList from "./EditableFriendsList";
 import SelectFriendsButton from "./SelectFriendsButton";
-import LinkButton from "./LinkButton";
-import lang from "../../lang";
+import LinkButton from "../../LinkButton";
+import lang from "../../../../lang";
 import SelectableFriendsList from "./SelectableFriendsList";
 import FriendsEditLabel from "./FriendsEditLabel";
 import EditFriendsButton from "./EditFriendsButton";

@@ -1,8 +1,8 @@
 import PageTitle from "../../../common/PageTitle";
 import lang from "../../../../lang";
 import SaveButton from "../../../common/SaveButton";
-import UsernameTextField from "../../../common/UsernameTextField";
-import FriendshipsEditor from "../../../common/FriendshipsEditor";
+import UsernameTextField from "../../../common/sections/usernameTextField/UsernameTextField";
+import FriendshipsEditor from "../../../common/sections/friendshipsEditor/FriendshipsEditor";
 import React from "react";
 import useEditCreateUser from "../../../../hooks/useEditCreateUser";
 

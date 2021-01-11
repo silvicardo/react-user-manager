@@ -1,8 +1,8 @@
 import React from 'react';
-import UsernameTextInput from "../components/common/UsernameTextInput";
+import UsernameTextInput from "../../../components/common/sections/usernameTextField/UsernameTextInput";
 
 export default {
-    title: 'UsernameTextInput',
+    title: 'Sections/UsernameTextField/UsernameTextInput',
     component: UsernameTextInput,
     argTypes: {
         className: {control: 'text'},

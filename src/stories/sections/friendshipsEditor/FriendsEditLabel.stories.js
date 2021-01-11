@@ -1,8 +1,8 @@
 import React from 'react';
-import FriendsEditLabel from "../components/common/FriendsEditLabel";
+import FriendsEditLabel from "../../../components/common/sections/friendshipsEditor/FriendsEditLabel";
 
 export default {
-    title: 'FriendsEditLabel',
+    title: 'Sections/FriendshipsEditor/FriendsEditLabel',
     component: FriendsEditLabel,
     argTypes: {
         className: {control: 'text'},

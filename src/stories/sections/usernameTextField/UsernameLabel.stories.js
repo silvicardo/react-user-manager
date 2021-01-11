@@ -1,8 +1,8 @@
 import React from 'react';
-import UsernameLabel from "../components/common/UsernameLabel";
+import UsernameLabel from "../../../components/common/sections/usernameTextField/UsernameLabel";
 
 export default {
-    title: 'UsernameLabel',
+    title: 'Sections/UsernameTextField/UsernameLabel',
     component: UsernameLabel,
     argTypes: {
         className: {control: 'text'}

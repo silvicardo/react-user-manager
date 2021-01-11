@@ -1,5 +1,5 @@
 import React from 'react';
-import UserListItem from "./UserListItem";
+import UserListItem from "../../UserListItem";
 import UnfriendButton from "./UnfriendButton";
 
 export const EditableFriendsList = ({className = '', friends,  onUnfriendClick}) => {

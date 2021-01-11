@@ -1,8 +1,8 @@
 import React from 'react';
-import SelectFriendsButton from "../components/common/SelectFriendsButton";
+import SelectFriendsButton from "../../../components/common/sections/friendshipsEditor/SelectFriendsButton";
 
 export default {
-    title: 'SelectFriendsButton',
+    title: 'Sections/FriendshipsEditor/SelectFriendsButton',
     component: SelectFriendsButton,
     argTypes: {
         className: {control: 'text'},

@@ -26,7 +26,7 @@ const UserCreatePage = ({className = ''}) => {
                     id={stackedViewId}
                     isActive={stackedViewId + 1 === stackedViewIds.length}
                     onDismiss={dismissActiveStackView}
-                    contentContainerClass={'bg-white w-100 h-100 border-left border-dark'}
+                    contentContainerClass={`bg-white w-100 h-100 ${stackedViewId > 0 ? 'border-left border-dark' : ''}` }
                     >
                         <UserCreateView
                             onCreateNewUserClick={addViewToStack}

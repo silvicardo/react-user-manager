@@ -1,6 +1,6 @@
 import React from 'react';
 import PickFriendButton from "./PickFriendButton";
-import UserListItem from "./UserListItem";
+import UserListItem from "../../UserListItem";
 
 export const SelectableFriendsList = ({className = '', users : notYetFriends, onPickFriendClick}) => {
 

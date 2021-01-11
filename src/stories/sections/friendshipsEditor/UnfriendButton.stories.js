@@ -1,8 +1,8 @@
 import React from 'react';
-import UnfriendButton from "../components/common/UnfriendButton";
+import UnfriendButton from "../../../components/common/sections/friendshipsEditor/UnfriendButton";
 
 export default {
-    title: 'UnfriendButton',
+    title: 'Sections/FriendshipsEditor/UnfriendButton',
     component: UnfriendButton,
     argTypes: {
         className: {control: 'text'},
