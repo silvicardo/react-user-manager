@@ -25,7 +25,9 @@ describe("useUserEditor hook", function () {
       this.userNotFriendsJson = data;
     });
     this.hookData = null;
-    this.MockComponent = ({ userId, isLogActive }) => {
+
+    this.MockComponent = ({ userId, isLogActive, children }) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       this.hookData = useUserEditor(userId);
       if (isLogActive) {
         console.log(this.hookData);
@@ -35,7 +37,7 @@ describe("useUserEditor hook", function () {
         <div style={{ backgroundColor: "rgb(39, 40, 34)" }}>
           <div style={{ color: "white", textAlign: "center" }}>
             <h1>🤖 hook return value 🤖</h1>
-            {props.children}
+            {children}
           </div>
           <ReactJson src={this.hookData} theme={"monokai"} displayDataTypes={false} />
         </div>
@@ -51,15 +53,17 @@ describe("useUserEditor hook", function () {
     const HookMockerComponent = this.MockComponent;
     mount(<HookMockerComponent userId={this.userJson.id} />);
 
-    cy.waitUntil(() => this.hookData.state.stored.username == this.userJson.name).then(() => {
-      expect(this.hookData.state.stored.username).toEqual(this.userJson.name);
-      expect(this.hookData.state.stored.friends).to.have.length(this.userFriendsJson.length);
-      expect(this.hookData.state.stored.friends).to.deep.equal(this.userFriendsJson);
-      expect(this.hookData.state.stored.unrelatedUsers).to.have.length(this.userNotFriendsJson.length);
-      expect(this.hookData.state.stored.unrelatedUsers).to.deep.equal(this.userNotFriendsJson);
-      expect(this.hookData.friends).to.deep.equal(this.userFriendsJson);
-      expect(this.hookData.notFriends).to.deep.equal(this.userNotFriendsJson);
-    });
+    return cy
+      .waitUntil(() => this.hookData.state.stored.username == this.userJson.name)
+      .then(() => {
+        expect(this.hookData.state.stored.username).toEqual(this.userJson.name);
+        expect(this.hookData.state.stored.friends).to.have.length(this.userFriendsJson.length);
+        expect(this.hookData.state.stored.friends).to.deep.equal(this.userFriendsJson);
+        expect(this.hookData.state.stored.unrelatedUsers).to.have.length(this.userNotFriendsJson.length);
+        expect(this.hookData.state.stored.unrelatedUsers).to.deep.equal(this.userNotFriendsJson);
+        expect(this.hookData.friends).to.deep.equal(this.userFriendsJson);
+        expect(this.hookData.notFriends).to.deep.equal(this.userNotFriendsJson);
+      });
   });
 
   it("after load sets a not-friend-user to be friend", function () {
@@ -74,20 +78,22 @@ describe("useUserEditor hook", function () {
       </HookMockerComponent>
     );
 
-    cy.waitUntil(() => this.hookData.state.stored.username == this.userJson.name).then(() => {
-      const nextFriendId = this.hookData.state.stored.unrelatedUsers[0].id;
+    return cy
+      .waitUntil(() => this.hookData.state.stored.username == this.userJson.name)
+      .then(() => {
+        const nextFriendId = this.hookData.state.stored.unrelatedUsers[0].id;
 
-      this.hookData.onSetUserToBeFriend(nextFriendId);
+        this.hookData.onSetUserToBeFriend(nextFriendId);
 
-      expect(this.hookData.state.next.friendsIds[0]).toEqual(nextFriendId);
-      expect(this.hookData.state.next.friendsIds).to.have.length(1);
+        expect(this.hookData.state.next.friendsIds[0]).toEqual(nextFriendId);
+        expect(this.hookData.state.next.friendsIds).to.have.length(1);
 
-      expect(this.hookData.state.next.removingFriendshipsIds).to.have.length(0);
-      expect(this.hookData.state.next.unrelatedUsersIds).to.have.length(0);
+        expect(this.hookData.state.next.removingFriendshipsIds).to.have.length(0);
+        expect(this.hookData.state.next.unrelatedUsersIds).to.have.length(0);
 
-      expect(this.hookData.friends.find((friend) => friend.id === nextFriendId)).to.exist;
-      expect(this.hookData.notFriends.find((friend) => friend.id === nextFriendId)).to.be.undefined;
-    });
+        expect(this.hookData.friends.find((friend) => friend.id === nextFriendId)).to.exist;
+        expect(this.hookData.notFriends.find((friend) => friend.id === nextFriendId)).to.be.undefined;
+      });
   });
 
   it("after load sets a friend to be not a friend anymore", function () {
@@ -102,22 +108,24 @@ describe("useUserEditor hook", function () {
       </HookMockerComponent>
     );
 
-    cy.waitUntil(() => this.hookData.state.stored.username === this.userJson.name).then(() => {
-      const deletingFriendId = this.hookData.state.stored.friends[0].id;
-      const deletingFriendshipId = this.hookData.state.stored.friends[0].friendshipId;
+    return cy
+      .waitUntil(() => this.hookData.state.stored.username === this.userJson.name)
+      .then(() => {
+        const deletingFriendId = this.hookData.state.stored.friends[0].id;
+        const deletingFriendshipId = this.hookData.state.stored.friends[0].friendshipId;
 
-      this.hookData.onSetUserToBeUnrelated(deletingFriendId);
+        this.hookData.onSetUserToBeUnrelated(deletingFriendId);
 
-      expect(this.hookData.state.next.friendsIds).to.have.length(0);
+        expect(this.hookData.state.next.friendsIds).to.have.length(0);
 
-      expect(this.hookData.state.next.removingFriendshipsIds).to.have.length(1);
-      expect(this.hookData.state.next.removingFriendshipsIds[0]).toEqual(deletingFriendshipId);
+        expect(this.hookData.state.next.removingFriendshipsIds).to.have.length(1);
+        expect(this.hookData.state.next.removingFriendshipsIds[0]).toEqual(deletingFriendshipId);
 
-      expect(this.hookData.state.next.unrelatedUsersIds).to.have.length(1);
-      expect(this.hookData.state.next.unrelatedUsersIds[0]).to.equal(deletingFriendId);
+        expect(this.hookData.state.next.unrelatedUsersIds).to.have.length(1);
+        expect(this.hookData.state.next.unrelatedUsersIds[0]).to.equal(deletingFriendId);
 
-      expect(this.hookData.friends.find((friend) => friend.id === deletingFriendId)).to.be.undefined;
-      expect(this.hookData.notFriends.find((friend) => friend.id === deletingFriendId)).to.exist;
-    });
+        expect(this.hookData.friends.find((friend) => friend.id === deletingFriendId)).to.be.undefined;
+        expect(this.hookData.notFriends.find((friend) => friend.id === deletingFriendId)).to.exist;
+      });
   });
 });
