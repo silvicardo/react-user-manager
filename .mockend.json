@@ -1,8 +1,0 @@
-{
-  "User": {
-    "name": "string",
-    "createdAt": "date",
-    "updatedAt": "date",
-    "friends": "User[]"
-  }
-}

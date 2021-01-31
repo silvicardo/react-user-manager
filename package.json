@@ -29,7 +29,10 @@
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:cypress/recommended",
+      "plugin:chai-friendly/recommended",
+      "prettier"
     ],
     "overrides": [
       {
@@ -38,6 +41,12 @@
         ],
         "rules": {
           "import/no-anonymous-default-export": "off"
+        }
+      },
+      {
+        "files": [ "cypress/**/*.spec.js" ],
+        "rules": {
+          "no-unused-expressions": 0
         }
       }
     ]
@@ -65,9 +74,13 @@
     "@testing-library/cypress": "^7.0.3",
     "cypress": "^6.2.0",
     "cypress-wait-until": "^1.7.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-chai-friendly": "^0.6.0",
+    "eslint-plugin-cypress": "^2.11.2",
     "faker": "^5.1.0",
     "json-server": "^0.16.3",
     "msw": "^0.25.0",
+    "prettier": "2.2.1",
     "react-json-view": "^1.19.1"
   }
 }

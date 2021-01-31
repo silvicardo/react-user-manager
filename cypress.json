@@ -3,7 +3,7 @@
   "experimentalComponentTesting": true,
   "componentFolder": "cypress/component",
   "ignoreTestFiles": "**/examples/*.spec.js",
-  "env" : {
+  "env": {
     "coverage": false,
     "REACT_APP_API_URL": "http://localhost:3001"
   }

@@ -1,419 +1,377 @@
 import lang from "../../../src/lang";
 
-describe('USER CREATE PAGE', function () {
+describe("USER CREATE PAGE", function () {
+  beforeEach(function () {
+    //list api fixture + new user notFriends
+    cy.fixture("users/list/success.json").then((data) => {
+      this.usersList = data;
+    });
+  });
 
-    beforeEach(function () {
+  describe("initial load", function () {
+    it("is reachable", function () {
+      const visitingUrl = `/user/create`;
 
-        //list api fixture + new user notFriends
-        cy.fixture('users/list/success.json').then(data => {
-            this.usersList = data;
-        })
+      cy.visit(visitingUrl);
 
+      cy.url().should("include", visitingUrl);
     });
 
-    describe('initial load', function () {
+    it("shows empty name input field focused and with correct placeholder", function () {
+      const visitingUrl = `/user/create`;
 
-        it('is reachable', function () {
+      cy.intercept(`**/users`, this.usersList).as("getUserNotFriends");
 
-            const visitingUrl = `/user/create`;
+      cy.visit(visitingUrl);
 
-            cy.visit(visitingUrl)
+      cy.wait("@getUserNotFriends");
 
-            cy.url().should('include', visitingUrl);
-        })
-
-        it('shows empty name input field focused and with correct placeholder', function () {
-
-            const visitingUrl = `/user/create`;
-
-            cy.intercept(`**/users`, this.usersList).as('getUserNotFriends');
-
-            cy.visit(visitingUrl);
-
-            cy.wait('@getUserNotFriends');
-
-            cy.focused().should('have.attr', 'name', 'username').and('have.value', '');
-
-        })
-
-        it('initially shows an empty list of friends with select and create buttons', function () {
-
-            const visitingUrl = `/user/create`;
-
-            cy.intercept(`**/users`, this.usersList).as('getUserNotFriends');
-
-            cy.visit(visitingUrl);
-
-            cy.wait('@getUserNotFriends');
-
-            cy.get('ul[data-cy=friends-list]').children().should('have.length', 0);
-
-            cy.findByText(lang.users.actions.select).should('exist').and('be.visible');
-
-            cy.findByText(lang.users.actions.edit).should('exist').and('be.visible');
-
-            cy.findByText(lang.users.actions.add).should('exist').and('be.visible');
-
-        })
-
-    })
-
-    describe('username editing', function () {
-
-        it('shows correctly typed changes', function () {
-
-            const visitingUrl = `/user/create`;
-            const newUsername = 'Ciccio Caputo';
-
-            cy.intercept(`**/users`, this.usersList).as('getUserNotFriends');
-
-            cy.visit(visitingUrl);
-
-            cy.wait('@getUserNotFriends');
-
-            cy.focused().type(newUsername).should('have.value', newUsername);
-        })
+      cy.focused().should("have.attr", "name", "username").and("have.value", "");
     });
 
-    describe('new user friends handling', function () {
+    it("initially shows an empty list of friends with select and create buttons", function () {
+      const visitingUrl = `/user/create`;
 
-        it('can select new friend from not-friends and remove it back', function () {
+      cy.intercept(`**/users`, this.usersList).as("getUserNotFriends");
 
-            const visitingUrl = `/user/create`;
-            const notFriendName = this.usersList[0].name;
+      cy.visit(visitingUrl);
 
-            cy.intercept(`**/users`, this.usersList).as('getUserNotFriends');
+      cy.wait("@getUserNotFriends");
 
-            cy.visit(visitingUrl);
+      cy.get("ul[data-cy=friends-list]").children().should("have.length", 0);
 
-            cy.wait('@getUserNotFriends');
+      cy.findByText(lang.users.actions.select).should("exist").and("be.visible");
 
-            //not visible, initially showing friendsList
-            cy.findByText(notFriendName).should('exist').and('be.hidden');
+      cy.findByText(lang.users.actions.edit).should("exist").and("be.visible");
 
-            //go to notFriends list
-            cy.findByText(lang.users.actions.select).should('exist').and('be.visible').click();
+      cy.findByText(lang.users.actions.add).should("exist").and("be.visible");
+    });
+  });
 
-            //and add it
-            cy.findByText(notFriendName).should('exist').and('be.visible')
-                .within((subject) => {
-                    cy.findByText(lang.users.actions.pick).should('exist').and('be.visible').click();
-                })
+  describe("username editing", function () {
+    it("shows correctly typed changes", function () {
+      const visitingUrl = `/user/create`;
+      const newUsername = "Ciccio Caputo";
 
-            //is now in friends list
-            cy.findByText(notFriendName).should('exist').and('be.hidden');
+      cy.intercept(`**/users`, this.usersList).as("getUserNotFriends");
 
-            //get to friends list and check it is visible there
+      cy.visit(visitingUrl);
 
-            cy.findByText(lang.users.actions.edit).should('exist').and('be.visible').click();
+      cy.wait("@getUserNotFriends");
 
-            cy.findByText(notFriendName).should('exist').and('be.visible')
+      cy.focused().type(newUsername).should("have.value", newUsername);
+    });
+  });
 
-            //remove it back
-            cy.findByText(notFriendName).should('exist').and('be.visible')
-                .within((subject) => {
-                    cy.findByText(lang.users.actions.remove).should('exist').and('be.visible').click();
-                })
+  describe("new user friends handling", function () {
+    it("can select new friend from not-friends and remove it back", function () {
+      const visitingUrl = `/user/create`;
+      const notFriendName = this.usersList[0].name;
 
-            //not visible in friendsList
-            cy.findByText(notFriendName).should('exist').and('be.hidden');
+      cy.intercept(`**/users`, this.usersList).as("getUserNotFriends");
 
-            //go to notFriends list
-            cy.findByText(lang.users.actions.select).should('exist').and('be.visible').click();
+      cy.visit(visitingUrl);
 
-            //and check it is there
-            cy.findByText(notFriendName).should('exist').and('be.visible')
+      cy.wait("@getUserNotFriends");
 
-        })
+      //not visible, initially showing friendsList
+      cy.findByText(notFriendName).should("exist").and("be.hidden");
 
-    })
+      //go to notFriends list
+      cy.findByText(lang.users.actions.select).should("exist").and("be.visible").click();
 
-    describe('stacking views', function () {
+      //and add it
+      cy.findByText(notFriendName)
+        .should("exist")
+        .and("be.visible")
+        .within((subject) => {
+          cy.findByText(lang.users.actions.pick).should("exist").and("be.visible").click();
+        });
 
-        it('stacks a new create user view when clicking on create new friend button', function () {
+      //is now in friends list
+      cy.findByText(notFriendName).should("exist").and("be.hidden");
 
-            const visitingUrl = `/user/create`;
+      //get to friends list and check it is visible there
 
-            cy.intercept(`**/users`, this.usersList).as('getUserNotFriends');
+      cy.findByText(lang.users.actions.edit).should("exist").and("be.visible").click();
 
-            cy.visit(visitingUrl);
+      cy.findByText(notFriendName).should("exist").and("be.visible");
 
-            cy.wait('@getUserNotFriends');
+      //remove it back
+      cy.findByText(notFriendName)
+        .should("exist")
+        .and("be.visible")
+        .within((subject) => {
+          cy.findByText(lang.users.actions.remove).should("exist").and("be.visible").click();
+        });
 
-            cy.findByText(lang.users.actions.add).should('exist').and('be.visible').click();
+      //not visible in friendsList
+      cy.findByText(notFriendName).should("exist").and("be.hidden");
 
-            cy.get('[data-cy=stack-view]').should('have.length', 2);
+      //go to notFriends list
+      cy.findByText(lang.users.actions.select).should("exist").and("be.visible").click();
 
-        })
+      //and check it is there
+      cy.findByText(notFriendName).should("exist").and("be.visible");
+    });
+  });
 
-        it('asks the user to save or abort the current user creation on clicking on a lower item in the stack when two or more creation are stacked', function () {
+  describe("stacking views", function () {
+    it("stacks a new create user view when clicking on create new friend button", function () {
+      const visitingUrl = `/user/create`;
 
-            const visitingUrl = `/user/create`;
+      cy.intercept(`**/users`, this.usersList).as("getUserNotFriends");
 
-            cy.intercept(`**/users`, this.usersList).as('getUserNotFriends');
+      cy.visit(visitingUrl);
 
-            cy.visit(visitingUrl);
+      cy.wait("@getUserNotFriends");
 
-            cy.wait('@getUserNotFriends');
+      cy.findByText(lang.users.actions.add).should("exist").and("be.visible").click();
 
-            cy.findByText(lang.users.actions.add).should('exist').and('be.visible').click();
+      cy.get("[data-cy=stack-view]").should("have.length", 2);
+    });
 
-            cy.get('[data-cy=stack-view]').last()
-                .within((subject) => {
-                    cy.get('[data-cy=stack-view-dismiss-area]').click();
-                    cy.findByText(lang.users.stackViews.areYouSureToDismiss).should('exist').and('be.visible')
-                    cy.findByText(lang.users.stackViews.stay).should('exist').and('be.visible')
-                    cy.findByText(lang.users.stackViews.dismiss).should('exist').and('be.visible')
-                });
-        })
+    it("asks the user to save or abort the current user creation on clicking on a lower item in the stack when two or more creation are stacked", function () {
+      const visitingUrl = `/user/create`;
 
-        it('is able to dismiss stacked view clicking on confirm dismiss', function () {
+      cy.intercept(`**/users`, this.usersList).as("getUserNotFriends");
 
-            const visitingUrl = `/user/create`;
+      cy.visit(visitingUrl);
 
-            cy.intercept(`**/users`, this.usersList).as('getUserNotFriends');
+      cy.wait("@getUserNotFriends");
 
-            cy.visit(visitingUrl);
+      cy.findByText(lang.users.actions.add).should("exist").and("be.visible").click();
 
-            cy.wait('@getUserNotFriends');
+      cy.get("[data-cy=stack-view]")
+        .last()
+        .within((subject) => {
+          cy.get("[data-cy=stack-view-dismiss-area]").click();
+          cy.findByText(lang.users.stackViews.areYouSureToDismiss).should("exist").and("be.visible");
+          cy.findByText(lang.users.stackViews.stay).should("exist").and("be.visible");
+          cy.findByText(lang.users.stackViews.dismiss).should("exist").and("be.visible");
+        });
+    });
 
-            cy.findByText(lang.users.actions.add).should('exist').and('be.visible').click();
+    it("is able to dismiss stacked view clicking on confirm dismiss", function () {
+      const visitingUrl = `/user/create`;
 
-            cy.get('[data-cy=stack-view]').last()
-                .within((subject) => {
-                    cy.get('[data-cy=stack-view-dismiss-area]').click();
+      cy.intercept(`**/users`, this.usersList).as("getUserNotFriends");
 
-                    cy.findByText(lang.users.stackViews.dismiss).should('exist').and('be.visible').click()
-                });
+      cy.visit(visitingUrl);
 
-            cy.get('[data-cy=stack-view]').should('have.length', 1);
-        })
+      cy.wait("@getUserNotFriends");
 
-        it('is able to keep stacked view clicking on cancel dismiss', function () {
+      cy.findByText(lang.users.actions.add).should("exist").and("be.visible").click();
 
-            const visitingUrl = `/user/create`;
+      cy.get("[data-cy=stack-view]")
+        .last()
+        .within((subject) => {
+          cy.get("[data-cy=stack-view-dismiss-area]").click();
 
-            cy.intercept(`**/users`, this.usersList).as('getUserNotFriends');
+          cy.findByText(lang.users.stackViews.dismiss).should("exist").and("be.visible").click();
+        });
 
-            cy.visit(visitingUrl);
+      cy.get("[data-cy=stack-view]").should("have.length", 1);
+    });
 
-            cy.wait('@getUserNotFriends');
+    it("is able to keep stacked view clicking on cancel dismiss", function () {
+      const visitingUrl = `/user/create`;
 
-            cy.findByText(lang.users.actions.add).should('exist').and('be.visible').click();
+      cy.intercept(`**/users`, this.usersList).as("getUserNotFriends");
 
-            cy.get('[data-cy=stack-view]').last()
-                .within((subject) => {
-                    cy.get('[data-cy=stack-view-dismiss-area]').click();
+      cy.visit(visitingUrl);
 
-                    cy.findByText(lang.users.stackViews.stay).should('exist').and('be.visible').click();
+      cy.wait("@getUserNotFriends");
 
-                });
+      cy.findByText(lang.users.actions.add).should("exist").and("be.visible").click();
 
-            cy.get('[data-cy=stack-view]').should('have.length', 2);
-        })
+      cy.get("[data-cy=stack-view]")
+        .last()
+        .within((subject) => {
+          cy.get("[data-cy=stack-view-dismiss-area]").click();
 
-    })
+          cy.findByText(lang.users.stackViews.stay).should("exist").and("be.visible").click();
+        });
 
+      cy.get("[data-cy=stack-view]").should("have.length", 2);
+    });
+  });
 
-    describe('submit', function () {
+  describe("submit", function () {
+    describe("validation", function () {
+      it("cannot submit a name already existing in users list", function () {
+        const visitingUrl = `/user/create`;
+        const duplicateUsername = this.usersList[3].name;
 
-        describe('validation', function () {
+        cy.intercept(`**/users`, this.usersList).as("getUserNotFriends");
+        cy.intercept("POST", `**/user/create`, {
+          statusCode: 403,
+          body: {
+            error: lang.server.editCreate.errors.noDuplicates,
+          },
+        });
 
-            it('cannot submit a name already existing in users list', function () {
+        cy.visit(visitingUrl);
 
-                const visitingUrl = `/user/create`;
-                const duplicateUsername = this.usersList[3].name;
+        cy.wait("@getUserNotFriends");
 
-                cy.intercept(`**/users`, this.usersList).as('getUserNotFriends');
-                cy.intercept('POST', `**/user/create`, {
-                    statusCode: 403,
-                    body: {
-                        error: lang.server.editCreate.errors.noDuplicates
-                    }
-                })
+        cy.focused().type(duplicateUsername).should("have.value", duplicateUsername);
 
-                cy.visit(visitingUrl);
+        cy.findByText(lang.users.actions.submit).should("exist").and("be.visible").click();
+        cy.findByText(lang.server.editCreate.errors.noDuplicates).should("exist").and("be.visible");
+      });
+    });
 
-                cy.wait('@getUserNotFriends');
+    describe("valid data submit handling", function () {
+      describe("when view is the only one in the stack", function () {
+        it("submits user and brings back to list page showing created user as last list element", function () {
+          const visitingUrl = `/user/create`;
+          const newUsername = "Ciccio Caputo";
+          const newUser = {
+            id: 7,
+            name: newUsername,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+          };
+          cy.intercept("POST", `**/user/create`, {
+            statusCode: 200,
+            body: newUser,
+          }).as("postNewUser");
 
-                cy.focused().type(duplicateUsername).should('have.value', duplicateUsername);
+          cy.visit(visitingUrl);
 
-                cy.findByText(lang.users.actions.submit).should('exist').and('be.visible').click();
-                cy.findByText(lang.server.editCreate.errors.noDuplicates).should('exist').and('be.visible');
+          cy.focused().type(newUsername).should("have.value", newUsername);
 
-            })
+          cy.intercept("GET", "**/users", {
+            statusCode: 200,
+            body: [...this.usersList, newUser],
+          }).as("updatedUsersList");
 
-        })
+          cy.findByText(lang.users.actions.submit).should("exist").and("be.visible").click();
 
-        describe('valid data submit handling', function () {
+          cy.url().should("equal", `${Cypress.config().baseUrl}/`);
 
-            describe('when view is the only one in the stack', function () {
+          cy.findByText(newUsername).should("exist").and("be.visible");
+        });
 
-                it('submits user and brings back to list page showing created user as last list element', function () {
+        //USING DEPRECATED cy.server + route because same test with cy.intercept was failing
+        it("attemps to submit, api fails once and succeeds on second attempt and brings back to list page showing created user as last list element", function () {
+          const visitingUrl = `/user/create`;
+          const newUsername = "Ciccio Caputo";
+          const newUser = {
+            id: 7,
+            name: newUsername,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+          };
 
-                    const visitingUrl = `/user/create`;
-                    const newUsername = 'Ciccio Caputo';
-                    const newUser = {
-                        id: 7,
-                        name: newUsername,
-                        createdAt: Date.now(),
-                        updatedAt: Date.now()
-                    }
-                    cy.intercept('POST', `**/user/create`, {
-                        statusCode: 200,
-                        body: newUser
-                    }).as('postNewUser');
+          cy.server();
+          cy.route("GET", "**/users", this.usersList).as("getUserNotFriends");
 
-                    cy.visit(visitingUrl);
+          cy.route({
+            method: "POST",
+            status: 500,
+            url: `**/user/create`,
+          }).as("submitUsersFailure");
 
-                    cy.focused().type(newUsername).should('have.value', newUsername);
+          cy.visit(visitingUrl);
+          cy.wait("@getUserNotFriends");
 
-                    cy.intercept('GET', '**/users', {
-                        statusCode: 200,
-                        body: [...this.usersList, newUser]
-                    }).as('updatedUsersList');
+          cy.focused().type(newUsername).should("have.value", newUsername);
 
-                    cy.findByText(lang.users.actions.submit).should('exist').and('be.visible').click();
+          cy.route("GET", "**/users", [...this.usersList, newUser]).as("updatedUsersList");
 
-                    cy.url().should('equal', `${Cypress.config().baseUrl}/`);
+          cy.findByText(lang.users.actions.submit).should("exist").and("be.visible").click();
+          cy.wait("@submitUsersFailure");
 
-                    cy.findByText(newUsername).should('exist').and('be.visible')
-                })
+          cy.route("POST", `/user/create`, newUser).as("submitUsersSuccess");
 
-                //USING DEPRECATED cy.server + route because same test with cy.intercept was failing
-                it('attemps to submit, api fails once and succeeds on second attempt and brings back to list page showing created user as last list element', function () {
+          cy.wait("@submitUsersSuccess");
 
-                    const visitingUrl = `/user/create`;
-                    const newUsername = 'Ciccio Caputo';
-                    const newUser = {
-                        id: 7,
-                        name: newUsername,
-                        createdAt: Date.now(),
-                        updatedAt: Date.now()
-                    }
+          cy.url().should("equal", `${Cypress.config().baseUrl}/`);
+          cy.findByText(newUsername).should("exist").and("be.visible");
+          cy.shouldBeCalled("@submitUsersFailure", 1);
+          cy.shouldBeCalled("@submitUsersSuccess", 1);
+        });
 
-                    cy.server();
-                    cy.route('GET', '**/users', this.usersList).as('getUserNotFriends');
+        //USING DEPRECATED cy.server + route because same test with cy.intercept was failing
+        it("attemps to submit, api fails twice, notifies user inviting to retry", function () {
+          const visitingUrl = `/user/create`;
+          const newUsername = "Ciccio Caputo";
+          const newUser = {
+            id: 7,
+            name: newUsername,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+          };
 
-                    cy.route({
-                        method: 'POST',
-                        status: 500,
-                        url: `**/user/create`,
-                    }).as('submitUsersFailure')
+          cy.server();
+          cy.route("GET", "**/users", this.usersList).as("getUserNotFriends");
 
-                    cy.visit(visitingUrl);
-                    cy.wait('@getUserNotFriends');
+          cy.route({
+            method: "POST",
+            status: 500,
+            url: `**/user/create`,
+          }).as("submitUsersFailure");
 
-                    cy.focused().type(newUsername).should('have.value', newUsername);
+          cy.visit(visitingUrl);
+          cy.wait("@getUserNotFriends");
 
+          cy.focused().type(newUsername).should("have.value", newUsername);
 
-                    cy.route('GET', '**/users', [...this.usersList, newUser]).as('updatedUsersList');
+          cy.findByText(lang.users.actions.submit).should("exist").and("be.visible").click();
 
-                    cy.findByText(lang.users.actions.submit).should('exist').and('be.visible').click();
-                    cy.wait('@submitUsersFailure');
+          cy.findByText(lang.server.editCreate.errors.notUsersFault).should("exist").and("be.visible");
 
-                    cy.route('POST', `/user/create`, newUser).as('submitUsersSuccess');
+          cy.shouldBeCalled("@submitUsersFailure", 2);
 
-                    cy.wait('@submitUsersSuccess');
+          cy.url().should("equal", `${Cypress.config().baseUrl}${visitingUrl}`);
+        });
+      });
 
-                    cy.url().should('equal', `${Cypress.config().baseUrl}/`);
-                    cy.findByText(newUsername).should('exist').and('be.visible')
-                    cy.shouldBeCalled('@submitUsersFailure', 1);
-                    cy.shouldBeCalled('@submitUsersSuccess', 1);
+      describe("when view is not the only one in the stack", function () {
+        //ONLY NOT REDUNDANT TESTS
 
-                })
+        it("on submit success closes current stack and shows previous in the stack", function () {
+          const visitingUrl = `/user/create`;
+          const newUsername = "Ciccio Caputo";
+          const newUser = {
+            id: 7,
+            name: newUsername,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+          };
+          cy.intercept("POST", `**/user/create`, {
+            statusCode: 200,
+            body: newUser,
+          }).as("postNewUser");
 
-                //USING DEPRECATED cy.server + route because same test with cy.intercept was failing
-                it('attemps to submit, api fails twice, notifies user inviting to retry', function () {
+          cy.intercept(`**/users`, this.usersList).as("getUserNotFriends");
 
-                    const visitingUrl = `/user/create`;
-                    const newUsername = 'Ciccio Caputo';
-                    const newUser = {
-                        id: 7,
-                        name: newUsername,
-                        createdAt: Date.now(),
-                        updatedAt: Date.now()
-                    }
+          cy.visit(visitingUrl);
 
-                    cy.server();
-                    cy.route('GET', '**/users', this.usersList).as('getUserNotFriends');
+          cy.wait("@getUserNotFriends");
 
-                    cy.route({
-                        method: 'POST',
-                        status: 500,
-                        url: `**/user/create`,
-                    }).as('submitUsersFailure')
+          cy.findByText(lang.users.actions.add).should("exist").and("be.visible").click();
 
-                    cy.visit(visitingUrl);
-                    cy.wait('@getUserNotFriends');
+          cy.get("[data-cy=stack-view]").should("have.length", 2);
 
-                    cy.focused().type(newUsername).should('have.value', newUsername);
+          cy.get("[data-cy=stack-view]")
+            .last()
+            .within((subject) => {
+              cy.focused().type(newUsername).should("have.value", newUsername);
 
-                    cy.findByText(lang.users.actions.submit).should('exist').and('be.visible').click();
+              cy.intercept("GET", "**/users", {
+                statusCode: 200,
+                body: [...this.usersList, newUser],
+              }).as("updatedUsersList");
 
+              cy.findByText(lang.users.actions.submit).should("exist").and("be.visible").click();
+            });
 
-                    cy.findByText(lang.server.editCreate.errors.notUsersFault).should('exist').and('be.visible')
-
-                    cy.shouldBeCalled('@submitUsersFailure', 2);
-
-                    cy.url().should('equal', `${Cypress.config().baseUrl}${visitingUrl}`);
-
-                })
-
-            })
-
-            describe('when view is not the only one in the stack', function () {
-
-                //ONLY NOT REDUNDANT TESTS
-
-                it('on submit success closes current stack and shows previous in the stack', function () {
-
-                    const visitingUrl = `/user/create`;
-                    const newUsername = 'Ciccio Caputo';
-                    const newUser = {
-                        id: 7,
-                        name: newUsername,
-                        createdAt: Date.now(),
-                        updatedAt: Date.now()
-                    }
-                    cy.intercept('POST', `**/user/create`, {
-                        statusCode: 200,
-                        body: newUser
-                    }).as('postNewUser');
-
-
-                    cy.intercept(`**/users`, this.usersList).as('getUserNotFriends');
-
-                    cy.visit(visitingUrl);
-
-                    cy.wait('@getUserNotFriends');
-
-                    cy.findByText(lang.users.actions.add).should('exist').and('be.visible').click();
-
-                    cy.get('[data-cy=stack-view]').should('have.length', 2);
-
-                    cy.get('[data-cy=stack-view]').last()
-                        .within((subject) => {
-
-                            cy.focused().type(newUsername).should('have.value', newUsername);
-
-                            cy.intercept('GET', '**/users', {
-                                statusCode: 200,
-                                body: [...this.usersList, newUser]
-                            }).as('updatedUsersList');
-
-                            cy.findByText(lang.users.actions.submit).should('exist').and('be.visible').click();
-
-                        });
-
-                    cy.get('[data-cy=stack-view]').should('have.length', 1);
-
-                })
-
-            })
-
-        })
-
-    })
-
-})
+          cy.get("[data-cy=stack-view]").should("have.length", 1);
+        });
+      });
+    });
+  });
+});
