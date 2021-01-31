@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useStackedViews() {
+export default function useStackedViews(): [number[], VoidFunction, VoidFunction] {
   const [viewsIds, setViewsIds] = useState([0]);
 
   const dismissActiveStackView = () => {

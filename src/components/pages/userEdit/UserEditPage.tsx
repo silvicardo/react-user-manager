@@ -4,10 +4,14 @@ import useEditCreateUser from "../../../hooks/useEditCreateUser";
 import { useHistory } from "react-router-dom";
 import UserEditView from "./components/UserEditView";
 
-const UserEditPage = ({ className = "" }) => {
+interface IUserEditPage {
+  className?: string;
+}
+
+const UserEditPage: React.FC<IUserEditPage> = ({ className = "" }) => {
   const history = useHistory();
 
-  let { userid } = useParams();
+  let { userid } = useParams<{ userid: string }>();
 
   const [
     friends,
@@ -33,6 +37,7 @@ const UserEditPage = ({ className = "" }) => {
 
   return (
     <UserEditView
+      className={className}
       userId={userid}
       onSubmit={onSubmit}
       submitError={submitError}

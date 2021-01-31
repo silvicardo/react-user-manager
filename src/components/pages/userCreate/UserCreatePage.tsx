@@ -4,7 +4,11 @@ import StackedView from "./components/StackedView";
 import UserCreateView from "./components/UserCreateView";
 import { useHistory } from "react-router-dom";
 
-const UserCreatePage = ({ className = "" }) => {
+interface IUserCreatePageProps {
+  className?: string;
+}
+
+const UserCreatePage: React.FC<IUserCreatePageProps> = ({ className = "" }) => {
   const history = useHistory();
 
   const [stackedViewIds, dismissActiveStackView, addViewToStack] = useStackedViews();

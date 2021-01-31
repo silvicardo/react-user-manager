@@ -3,8 +3,16 @@ import PageTitle from "../../common/PageTitle";
 import lang from "../../../lang";
 import LinkButton from "../../common/LinkButton";
 import AllUsersList from "./components/AllUsersList";
+import { AppUser } from "../../../types/appTypes";
 
-export const UsersListPage = ({ className = "", users, isFetchingUsers, apiUsersError }) => {
+interface IUsersListPageProps {
+  className?: string;
+  users: AppUser[];
+  isFetchingUsers: boolean;
+  apiUsersError: string;
+}
+
+const UsersListPage: React.FC<IUsersListPageProps> = ({ className = "", users, isFetchingUsers, apiUsersError }) => {
   return (
     <div className={`users-list-page container  py-3 ${className}`}>
       <div className={"d-flex justify-content-between mb-5"}>

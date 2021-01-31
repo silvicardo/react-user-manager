@@ -1,3 +1,4 @@
+import React from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
 import UserEditPage from "./pages/userEdit/UserEditPage";
 import useUsers from "../hooks/useUsers";
@@ -5,7 +6,7 @@ import lang from "../lang";
 import UsersListPage from "./pages/usersList/UsersListPage";
 import UserCreatePage from "./pages/userCreate/UserCreatePage";
 
-const App = () => {
+const App: React.FC = () => {
   let { pathname } = useLocation();
 
   const [appUsers, isFetchingUsers, apiUsersError] = useUsers([pathname]); //on each page change refresh users
